@@ -2,24 +2,24 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 border-t border-gray-800 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <footer className="border-t border-sand bg-cream px-6 lg:px-10">
+      <div className="mx-auto max-w-[1132px]">
         {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-10 py-16 md:grid-cols-4">
           {/* Company Info */}
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              <span className="text-blue-400">Go</span>
-              <span className="text-white ml-1">PDF</span>
+            <h2 className="mb-4 text-[22px] font-medium leading-none tracking-heading text-ink">
+              <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
+              <span className="ml-0.5 text-ink">PDF</span>
             </h2>
-            <p className="text-gray-400 mb-4 max-w-md">
+            <p className="mb-6 max-w-md text-body">
               Transform, edit, and manage your PDF documents with ease.
               Professional PDF tools for modern workflows.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-5">
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-muted hover:text-ink transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -35,7 +35,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-muted hover:text-ink transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -47,7 +47,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-muted hover:text-ink transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -63,7 +63,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-muted hover:text-ink transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -82,12 +82,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="mb-4 text-sm font-medium uppercase tracking-[0.12em] text-ink">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Features
                 </a>
@@ -95,7 +97,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Pricing
                 </a>
@@ -103,7 +105,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Documentation
                 </a>
@@ -111,7 +113,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   API
                 </a>
@@ -121,12 +123,14 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Support</h3>
+            <h3 className="mb-4 text-sm font-medium uppercase tracking-[0.12em] text-ink">
+              Support
+            </h3>
             <ul className="space-y-2">
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Help Center
                 </a>
@@ -134,7 +138,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Contact Us
                 </a>
@@ -142,7 +146,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Privacy Policy
                 </a>
@@ -150,7 +154,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Terms of Service
                 </a>
@@ -160,9 +164,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+        <div className="border-t border-sand py-7">
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
+            <p className="text-caption text-muted">
               © 2025 Go PDF. All rights reserved.
             </p>
           </div>

@@ -87,10 +87,10 @@ const ResetPassword = () => {
 
   if (tokenValid === null) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full">
-          <div className="bg-gray-800 p-8 rounded-xl border border-gray-700 text-center">
-            <p className="text-white">Verifying reset token...</p>
+          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand text-center">
+            <p className="text-ink">Verifying reset token...</p>
           </div>
         </div>
       </div>
@@ -99,26 +99,26 @@ const ResetPassword = () => {
 
   if (!tokenValid) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full">
-          <div className="bg-gray-800 p-8 rounded-xl border border-gray-700">
+          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-2">
-                <span className="text-blue-400">Go</span>
-                <span className="text-white ml-1">PDF</span>
+              <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
+                <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
+                <span className="ml-1 text-ink">PDF</span>
               </h1>
-              <h2 className="text-2xl font-bold text-white mb-4">
+              <h2 className="text-2xl font-medium text-ink mb-4">
                 Invalid Reset Link
               </h2>
             </div>
 
             {error && (
-              <div className="bg-red-500 text-white p-3 rounded-md mb-4">
+              <div className="mb-4 rounded-xl border border-error/40 bg-error/10 p-3 text-sm text-error">
                 {error}
               </div>
             )}
 
-            <p className="text-gray-300 mb-6">
+            <p className="text-body mb-6">
               This password reset link is invalid or has expired. Please request
               a new one.
             </p>
@@ -126,7 +126,7 @@ const ResetPassword = () => {
             <div className="text-center">
               <Link
                 to="/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200 inline-block"
+                className="inline-block rounded-pill bg-accent hover:bg-accent-hover text-ink py-2.5 px-6 font-medium transition-colors duration-200"
               >
                 Return to Login
               </Link>
@@ -138,47 +138,47 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            <span className="text-blue-400">Go</span>
-            <span className="text-white ml-1">PDF</span>
+          <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
+            <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
+            <span className="ml-1 text-ink">PDF</span>
           </h1>
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-[32px] font-medium tracking-heading text-ink mb-2">
             Reset Your Password
           </h2>
-          <p className="text-gray-400">Enter your new password below</p>
+          <p className="text-muted">Enter your new password below</p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500 text-white p-3 rounded-md">{error}</div>
+          <div className="rounded-xl border border-error/40 bg-error/10 p-3 text-sm text-error">{error}</div>
         )}
 
         {/* Success Message */}
         {success && (
-          <div className="bg-green-500 text-white p-3 rounded-md">
+          <div className="rounded-xl border border-mint/40 bg-mint/10 p-3 text-sm text-ink">
             {success}
           </div>
         )}
 
         {/* Reset Password Form */}
-        <div className="bg-gray-800 p-8 rounded-xl border border-gray-700">
+        <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Password Field */}
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 New Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -198,13 +198,13 @@ const ResetPassword = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-10 pr-12 py-3 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200"
                   placeholder="Enter your new password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted hover:text-ink"
                 >
                   {showPassword ? (
                     <svg
@@ -249,14 +249,14 @@ const ResetPassword = () => {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 Confirm New Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -276,7 +276,7 @@ const ResetPassword = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-3 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-10 pr-3 py-3 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200"
                   placeholder="Confirm your new password"
                 />
               </div>
@@ -286,7 +286,7 @@ const ResetPassword = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-pill bg-accent hover:bg-accent-hover text-ink py-3.5 px-4 font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Resetting Password..." : "Reset Password"}
             </button>
@@ -294,11 +294,11 @@ const ResetPassword = () => {
 
           {/* Back to Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-muted">
               Remember your password?{" "}
               <Link
                 to="/login"
-                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+                className="text-ink hover:text-ink font-medium transition-colors duration-200"
               >
                 Back to login
               </Link>

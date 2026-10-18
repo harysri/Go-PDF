@@ -59,14 +59,14 @@
 //       ? Array.from(email).reduce((acc, char) => acc + char.charCodeAt(0), 0)
 //       : 0;
 //     const colors = [
-//       "bg-blue-600",
-//       "bg-purple-600",
-//       "bg-green-600",
-//       "bg-red-600",
-//       "bg-yellow-600",
-//       "bg-indigo-600",
-//       "bg-pink-600",
-//       "bg-teal-600",
+//       "bg-accent",
+//       "bg-mist",
+//       "bg-cloud",
+//       "bg-paper",
+//       "bg-stone",
+//       "bg-sand",
+//       "bg-accent-hover",
+//       "bg-[#e6e6e6]",
 //     ];
 //     return colors[hash % colors.length];
 //   };
@@ -147,21 +147,21 @@
 //   const avatarColor = getUserAvatarColor(user.email);
 
 //   return (
-//     <div className="min-h-screen bg-gray-900">
+//     <div className="min-h-screen bg-cream">
 //       {/* Header */}
-//       <div className="bg-gray-800 border-b border-gray-700">
+//       <div className="bg-sand border-b border-sand">
 //         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 //           <div className="flex items-center justify-between">
 //             <div className="flex items-center space-x-4">
 //               <button
 //                 onClick={() => navigate("/summarize")}
-//                 className="flex items-center text-gray-400 hover:text-white transition-colors"
+//                 className="flex items-center text-muted hover:text-ink transition-colors"
 //               >
 //                 <ArrowLeft className="h-5 w-5 mr-2" />
 //                 Back to Summarize
 //               </button>
 //             </div>
-//             <h1 className="text-2xl font-bold text-white">Profile Settings</h1>
+//             <h1 className="text-2xl font-medium text-ink">Profile Settings</h1>
 //             <div></div>
 //           </div>
 //         </div>
@@ -171,19 +171,19 @@
 //         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 //           {/* Profile Summary Card */}
 //           <div className="lg:col-span-1">
-//             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center">
+//             <div className="bg-sand rounded-3xl border border-sand p-6 text-center">
 //               <div
-//                 className={`w-24 h-24 rounded-full ${avatarColor} flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4`}
+//                 className={`w-24 h-24 rounded-full ${avatarColor} flex items-center justify-center text-ink font-medium text-2xl mx-auto mb-4`}
 //               >
 //                 {initials}
 //               </div>
-//               <h2 className="text-xl font-semibold text-white mb-1">
+//               <h2 className="text-xl font-medium text-ink mb-1">
 //                 {user.firstName} {user.lastName}
 //               </h2>
-//               <p className="text-gray-400 mb-2">@{user.username}</p>
-//               <p className="text-sm text-gray-500">{user.email}</p>
-//               <div className="mt-4 pt-4 border-t border-gray-700">
-//                 <div className="flex items-center justify-center text-sm text-gray-400">
+//               <p className="text-muted mb-2">@{user.username}</p>
+//               <p className="text-sm text-muted">{user.email}</p>
+//               <div className="mt-4 pt-4 border-t border-sand">
+//                 <div className="flex items-center justify-center text-sm text-muted">
 //                   <Calendar className="h-4 w-4 mr-2" />
 //                   Member since{" "}
 //                   {new Date(user.joinedDate).toLocaleDateString("en-US", {
@@ -200,10 +200,10 @@
 //             {/* Status Messages */}
 //             {saveStatus && (
 //               <div
-//                 className={`p-4 rounded-lg ${
+//                 className={`p-4 rounded-xl ${
 //                   saveStatus.includes("Error")
-//                     ? "bg-red-900/50 border border-red-700 text-red-300"
-//                     : "bg-green-900/50 border border-green-700 text-green-300"
+//                     ? "bg-error/10 border border-error/40 text-error"
+//                     : "bg-mint/10 border border-mint/40 text-ink"
 //                 }`}
 //               >
 //                 {saveStatus}
@@ -211,13 +211,13 @@
 //             )}
 //             {passwordStatus && (
 //               <div
-//                 className={`p-4 rounded-lg ${
+//                 className={`p-4 rounded-xl ${
 //                   passwordStatus.includes("Error") ||
 //                   passwordStatus.includes("do not match") ||
 //                   passwordStatus.includes("Please fill") ||
 //                   passwordStatus.includes("must be")
-//                     ? "bg-red-900/50 border border-red-700 text-red-300"
-//                     : "bg-green-900/50 border border-green-700 text-green-300"
+//                     ? "bg-error/10 border border-error/40 text-error"
+//                     : "bg-mint/10 border border-mint/40 text-ink"
 //                 }`}
 //               >
 //                 {passwordStatus}
@@ -225,17 +225,17 @@
 //             )}
 
 //             {/* Personal Information */}
-//             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+//             <div className="bg-sand rounded-3xl border border-sand p-6">
 //               <div className="flex items-center justify-between mb-6">
 //                 <div className="flex items-center">
-//                   <User className="h-5 w-5 text-blue-400 mr-2" />
-//                   <h3 className="text-lg font-semibold text-white">
+//                   <User className="h-5 w-5 text-ink mr-2" />
+//                   <h3 className="text-lg font-medium text-ink">
 //                     Personal Information
 //                   </h3>
 //                 </div>
 //                 <button
 //                   onClick={() => setIsEditing(!isEditing)}
-//                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+//                   className="rounded-pill px-5 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors text-sm"
 //                 >
 //                   {isEditing ? "Cancel" : "Edit Profile"}
 //                 </button>
@@ -243,7 +243,7 @@
 
 //               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 //                 <div>
-//                   <label className="block text-sm font-medium text-gray-300 mb-2">
+//                   <label className="block text-sm font-medium text-body mb-2">
 //                     First Name
 //                   </label>
 //                   <input
@@ -252,11 +252,11 @@
 //                     value={user.firstName}
 //                     onChange={handleUserUpdate}
 //                     disabled={!isEditing}
-//                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+//                     className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
 //                   />
 //                 </div>
 //                 <div>
-//                   <label className="block text-sm font-medium text-gray-300 mb-2">
+//                   <label className="block text-sm font-medium text-body mb-2">
 //                     Last Name
 //                   </label>
 //                   <input
@@ -265,11 +265,11 @@
 //                     value={user.lastName}
 //                     onChange={handleUserUpdate}
 //                     disabled={!isEditing}
-//                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+//                     className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
 //                   />
 //                 </div>
 //                 <div>
-//                   <label className="block text-sm font-medium text-gray-300 mb-2">
+//                   <label className="block text-sm font-medium text-body mb-2">
 //                     <Mail className="h-4 w-4 inline mr-1" />
 //                     Email
 //                   </label>
@@ -279,7 +279,7 @@
 //                     value={user.email}
 //                     onChange={handleUserUpdate}
 //                     disabled={!isEditing}
-//                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+//                     className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
 //                   />
 //                 </div>
 //               </div>
@@ -288,7 +288,7 @@
 //                 <div className="mt-6 flex justify-end">
 //                   <button
 //                     onClick={saveProfile}
-//                     className="flex items-center px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+//                     className="flex items-center rounded-pill px-6 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors"
 //                   >
 //                     <Save className="h-4 w-4 mr-2" />
 //                     Save Changes
@@ -298,15 +298,15 @@
 //             </div>
 
 //             {/* Password Section */}
-//             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+//             <div className="bg-sand rounded-3xl border border-sand p-6">
 //               <div className="flex items-center justify-between mb-6">
 //                 <div className="flex items-center">
-//                   <Key className="h-5 w-5 text-yellow-400 mr-2" />
-//                   <h3 className="text-lg font-semibold text-white">Security</h3>
+//                   <Key className="h-5 w-5 text-ink mr-2" />
+//                   <h3 className="text-lg font-medium text-ink">Security</h3>
 //                 </div>
 //                 <button
 //                   onClick={() => setIsChangingPassword(!isChangingPassword)}
-//                   className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors text-sm"
+//                   className="rounded-pill px-5 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors text-sm"
 //                 >
 //                   {isChangingPassword ? "Cancel" : "Change Password"}
 //                 </button>
@@ -315,7 +315,7 @@
 //               {isChangingPassword && (
 //                 <div className="space-y-4">
 //                   <div>
-//                     <label className="block text-sm font-medium text-gray-300 mb-2">
+//                     <label className="block text-sm font-medium text-body mb-2">
 //                       Current Password
 //                     </label>
 //                     <div className="relative">
@@ -324,13 +324,13 @@
 //                         name="currentPassword"
 //                         value={passwordData.currentPassword}
 //                         onChange={handlePasswordChange}
-//                         className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                         className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
 //                         placeholder="Enter current password"
 //                       />
 //                       <button
 //                         type="button"
 //                         onClick={() => togglePasswordVisibility("current")}
-//                         className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+//                         className="absolute right-3 top-2.5 text-muted hover:text-ink"
 //                       >
 //                         {showPasswords.current ? (
 //                           <EyeOff className="h-4 w-4" />
@@ -341,7 +341,7 @@
 //                     </div>
 //                   </div>
 //                   <div>
-//                     <label className="block text-sm font-medium text-gray-300 mb-2">
+//                     <label className="block text-sm font-medium text-body mb-2">
 //                       New Password
 //                     </label>
 //                     <div className="relative">
@@ -350,13 +350,13 @@
 //                         name="newPassword"
 //                         value={passwordData.newPassword}
 //                         onChange={handlePasswordChange}
-//                         className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                         className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
 //                         placeholder="Enter new password"
 //                       />
 //                       <button
 //                         type="button"
 //                         onClick={() => togglePasswordVisibility("new")}
-//                         className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+//                         className="absolute right-3 top-2.5 text-muted hover:text-ink"
 //                       >
 //                         {showPasswords.new ? (
 //                           <EyeOff className="h-4 w-4" />
@@ -367,7 +367,7 @@
 //                     </div>
 //                   </div>
 //                   <div>
-//                     <label className="block text-sm font-medium text-gray-300 mb-2">
+//                     <label className="block text-sm font-medium text-body mb-2">
 //                       Confirm New Password
 //                     </label>
 //                     <div className="relative">
@@ -376,13 +376,13 @@
 //                         name="confirmPassword"
 //                         value={passwordData.confirmPassword}
 //                         onChange={handlePasswordChange}
-//                         className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                         className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
 //                         placeholder="Confirm new password"
 //                       />
 //                       <button
 //                         type="button"
 //                         onClick={() => togglePasswordVisibility("confirm")}
-//                         className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+//                         className="absolute right-3 top-2.5 text-muted hover:text-ink"
 //                       >
 //                         {showPasswords.confirm ? (
 //                           <EyeOff className="h-4 w-4" />
@@ -395,7 +395,7 @@
 //                   <div className="flex justify-end pt-4">
 //                     <button
 //                       onClick={changePassword}
-//                       className="flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+//                       className="flex items-center px-6 py-2 bg-accent hover:bg-accent-hover text-ink rounded-xl transition-colors"
 //                     >
 //                       <Key className="h-4 w-4 mr-2" />
 //                       Update Password
@@ -405,7 +405,7 @@
 //               )}
 
 //               {!isChangingPassword && (
-//                 <div className="text-gray-400 text-sm">
+//                 <div className="text-muted text-sm">
 //                   <p>Keep your account secure by using a strong password.</p>
 //                   <p className="mt-1">
 //                     Password requirements: At least 6 characters long.
@@ -511,14 +511,14 @@ const ProfilePage = () => {
       ? Array.from(email).reduce((acc, char) => acc + char.charCodeAt(0), 0)
       : 0;
     const colors = [
-      "bg-blue-600",
-      "bg-purple-600",
-      "bg-green-600",
-      "bg-red-600",
-      "bg-yellow-600",
-      "bg-indigo-600",
-      "bg-pink-600",
-      "bg-teal-600",
+      "bg-accent",
+      "bg-mist",
+      "bg-cloud",
+      "bg-paper",
+      "bg-stone",
+      "bg-sand",
+      "bg-accent-hover",
+      "bg-[#e6e6e6]",
     ];
     return colors[hash % colors.length];
   };
@@ -607,28 +607,28 @@ const ProfilePage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">Loading profile...</div>
+      <div className="min-h-screen bg-cream flex items-center justify-center">
+        <div className="text-ink">Loading profile...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-sand border-b border-sand">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate("/summarize")}
-                className="flex items-center text-gray-400 hover:text-white transition-colors"
+                className="flex items-center text-muted hover:text-ink transition-colors"
               >
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Back to Summarize
               </button>
             </div>
-            <h1 className="text-2xl font-bold text-white">Profile Settings</h1>
+            <h1 className="text-2xl font-medium text-ink">Profile Settings</h1>
             <div></div>
           </div>
         </div>
@@ -638,18 +638,18 @@ const ProfilePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Summary Card */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center">
+            <div className="bg-sand rounded-3xl border border-sand p-6 text-center">
               <div
-                className={`w-24 h-24 rounded-full ${avatarColor} flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4`}
+                className={`w-24 h-24 rounded-full ${avatarColor} flex items-center justify-center text-ink font-medium text-2xl mx-auto mb-4`}
               >
                 {initials}
               </div>
-              <h2 className="text-xl font-semibold text-white mb-1">
+              <h2 className="text-xl font-medium text-ink mb-1">
                 {user.firstName} {user.lastName}
               </h2>
-              <p className="text-gray-400 mb-2">{user.email}</p>
-              <div className="mt-4 pt-4 border-t border-gray-700">
-                <div className="flex items-center justify-center text-sm text-gray-400">
+              <p className="text-muted mb-2">{user.email}</p>
+              <div className="mt-4 pt-4 border-t border-sand">
+                <div className="flex items-center justify-center text-sm text-muted">
                   <Calendar className="h-4 w-4 mr-2" />
                   Member since{" "}
                   {new Date(user.joinedDate).toLocaleDateString("en-US", {
@@ -666,10 +666,10 @@ const ProfilePage = () => {
             {/* Status Messages */}
             {saveStatus && (
               <div
-                className={`p-4 rounded-lg ${
+                className={`p-4 rounded-xl ${
                   saveStatus.includes("Error") || saveStatus.includes("Failed")
-                    ? "bg-red-900/50 border border-red-700 text-red-300"
-                    : "bg-green-900/50 border border-green-700 text-green-300"
+                    ? "bg-error/10 border border-error/40 text-error"
+                    : "bg-mint/10 border border-mint/40 text-ink"
                 }`}
               >
                 {saveStatus}
@@ -677,11 +677,11 @@ const ProfilePage = () => {
             )}
             {passwordStatus && (
               <div
-                className={`p-4 rounded-lg ${
+                className={`p-4 rounded-xl ${
                   passwordStatus.includes("Error") ||
                   passwordStatus.includes("Failed")
-                    ? "bg-red-900/50 border border-red-700 text-red-300"
-                    : "bg-green-900/50 border border-green-700 text-green-300"
+                    ? "bg-error/10 border border-error/40 text-error"
+                    : "bg-mint/10 border border-mint/40 text-ink"
                 }`}
               >
                 {passwordStatus}
@@ -689,17 +689,17 @@ const ProfilePage = () => {
             )}
 
             {/* Personal Information */}
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div className="bg-sand rounded-3xl border border-sand p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
-                  <User className="h-5 w-5 text-blue-400 mr-2" />
-                  <h3 className="text-lg font-semibold text-white">
+                  <User className="h-5 w-5 text-ink mr-2" />
+                  <h3 className="text-lg font-medium text-ink">
                     Personal Information
                   </h3>
                 </div>
                 <button
                   onClick={() => setIsEditing(!isEditing)}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                  className="rounded-pill px-5 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors text-sm"
                 >
                   {isEditing ? "Cancel" : "Edit Profile"}
                 </button>
@@ -707,7 +707,7 @@ const ProfilePage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-body mb-2">
                     First Name
                   </label>
                   <input
@@ -716,11 +716,11 @@ const ProfilePage = () => {
                     value={user.firstName}
                     onChange={handleUserUpdate}
                     disabled={!isEditing}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-body mb-2">
                     Last Name
                   </label>
                   <input
@@ -729,11 +729,11 @@ const ProfilePage = () => {
                     value={user.lastName}
                     onChange={handleUserUpdate}
                     disabled={!isEditing}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-body mb-2">
                     <Mail className="h-4 w-4 inline mr-1" />
                     Email
                   </label>
@@ -743,11 +743,11 @@ const ProfilePage = () => {
                     value={user.email}
                     onChange={handleUserUpdate}
                     disabled={!isEditing}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-body mb-2">
                     <Phone className="h-4 w-4 inline mr-1" />
                     Phone Number
                   </label>
@@ -757,7 +757,7 @@ const ProfilePage = () => {
                     value={user.phoneNumber}
                     onChange={handleUserUpdate}
                     disabled={!isEditing}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -766,7 +766,7 @@ const ProfilePage = () => {
                 <div className="mt-6 flex justify-end">
                   <button
                     onClick={saveProfile}
-                    className="flex items-center px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                    className="flex items-center rounded-pill px-6 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors"
                   >
                     <Save className="h-4 w-4 mr-2" />
                     Save Changes
@@ -776,15 +776,15 @@ const ProfilePage = () => {
             </div>
 
             {/* Password Section */}
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div className="bg-sand rounded-3xl border border-sand p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
-                  <Key className="h-5 w-5 text-yellow-400 mr-2" />
-                  <h3 className="text-lg font-semibold text-white">Security</h3>
+                  <Key className="h-5 w-5 text-ink mr-2" />
+                  <h3 className="text-lg font-medium text-ink">Security</h3>
                 </div>
                 <button
                   onClick={() => setIsChangingPassword(!isChangingPassword)}
-                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors text-sm"
+                  className="rounded-pill px-5 py-2 bg-accent hover:bg-accent-hover text-ink transition-colors text-sm"
                 >
                   {isChangingPassword ? "Cancel" : "Change Password"}
                 </button>
@@ -793,7 +793,7 @@ const ProfilePage = () => {
               {isChangingPassword && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-body mb-2">
                       Current Password
                     </label>
                     <div className="relative">
@@ -802,13 +802,13 @@ const ProfilePage = () => {
                         name="currentPassword"
                         value={passwordData.currentPassword}
                         onChange={handlePasswordChange}
-                        className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
                         placeholder="Enter current password"
                       />
                       <button
                         type="button"
                         onClick={() => togglePasswordVisibility("current")}
-                        className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-2.5 text-muted hover:text-ink"
                       >
                         {showPasswords.current ? (
                           <EyeOff className="h-4 w-4" />
@@ -819,7 +819,7 @@ const ProfilePage = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-body mb-2">
                       New Password
                     </label>
                     <div className="relative">
@@ -828,13 +828,13 @@ const ProfilePage = () => {
                         name="newPassword"
                         value={passwordData.newPassword}
                         onChange={handlePasswordChange}
-                        className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
                         placeholder="Enter new password"
                       />
                       <button
                         type="button"
                         onClick={() => togglePasswordVisibility("new")}
-                        className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-2.5 text-muted hover:text-ink"
                       >
                         {showPasswords.new ? (
                           <EyeOff className="h-4 w-4" />
@@ -845,7 +845,7 @@ const ProfilePage = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-body mb-2">
                       Confirm New Password
                     </label>
                     <div className="relative">
@@ -854,13 +854,13 @@ const ProfilePage = () => {
                         name="confirmPassword"
                         value={passwordData.confirmPassword}
                         onChange={handlePasswordChange}
-                        className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 pr-10 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
                         placeholder="Confirm new password"
                       />
                       <button
                         type="button"
                         onClick={() => togglePasswordVisibility("confirm")}
-                        className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-2.5 text-muted hover:text-ink"
                       >
                         {showPasswords.confirm ? (
                           <EyeOff className="h-4 w-4" />
@@ -873,7 +873,7 @@ const ProfilePage = () => {
                   <div className="flex justify-end pt-4">
                     <button
                       onClick={changePassword}
-                      className="flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                      className="flex items-center px-6 py-2 bg-accent hover:bg-accent-hover text-ink rounded-xl transition-colors"
                     >
                       <Key className="h-4 w-4 mr-2" />
                       Update Password
@@ -883,7 +883,7 @@ const ProfilePage = () => {
               )}
 
               {!isChangingPassword && (
-                <div className="text-gray-400 text-sm">
+                <div className="text-muted text-sm">
                   <p>Keep your account secure by using a strong password.</p>
                   <p className="mt-1">
                     Password requirements: At least 8 characters long.

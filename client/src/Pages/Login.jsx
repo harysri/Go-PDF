@@ -93,18 +93,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            <span className="text-blue-400">Go</span>
-            <span className="text-white ml-1">PDF</span>
+          <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
+            <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
+            <span className="ml-1 text-ink">PDF</span>
           </h1>
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-[32px] font-medium tracking-heading text-ink mb-2">
             {showForgotPassword ? "Reset Password" : "Welcome Back"}
           </h2>
-          <p className="text-gray-400">
+          <p className="text-muted">
             {showForgotPassword
               ? "Enter your email to reset password"
               : "Sign in to your account to continue"}
@@ -113,15 +113,15 @@ const Login = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500 text-white p-3 rounded-md">{error}</div>
+          <div className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error">{error}</div>
         )}
 
         {forgotMessage && (
           <div
-            className={`p-3 rounded-md ${
+            className={`p-3 rounded-xl ${
               forgotMessage.includes("Failed")
-                ? "bg-red-500 text-white"
-                : "bg-green-500 text-white"
+                ? "border border-error/40 bg-error/10 text-error"
+                : "border border-mint/40 bg-mint/10 text-ink"
             }`}
           >
             {forgotMessage}
@@ -130,19 +130,19 @@ const Login = () => {
 
         {showForgotPassword ? (
           /* Forgot Password Form */
-          <div className="bg-gray-800 p-8 rounded-xl border border-gray-700">
+          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
             <form className="space-y-6" onSubmit={handleForgotPassword}>
               <div>
                 <label
                   htmlFor="forgotEmail"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-body mb-2"
                 >
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-muted"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -161,7 +161,7 @@ const Login = () => {
                     required
                     value={forgotEmail}
                     onChange={(e) => setForgotEmail(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-3 py-3 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -170,7 +170,7 @@ const Login = () => {
               <div className="flex space-x-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200"
+                  className="flex-1 rounded-pill bg-accent hover:bg-accent-hover text-ink py-3.5 px-4 font-medium transition-colors duration-200"
                 >
                   Send Reset Link
                 </button>
@@ -181,7 +181,7 @@ const Login = () => {
                     setForgotMessage("");
                     setForgotEmail("");
                   }}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200"
+                  className="flex-1 rounded-pill border border-mist bg-sand hover:bg-cloud text-ink py-3.5 px-4 font-medium transition-colors duration-200"
                 >
                   Cancel
                 </button>
@@ -190,20 +190,20 @@ const Login = () => {
           </div>
         ) : (
           /* Login Form */
-          <div className="bg-gray-800 p-8 rounded-xl border border-gray-700">
+          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-body mb-2"
                 >
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-muted"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -223,7 +223,7 @@ const Login = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-3 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-3 py-3 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -233,14 +233,14 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-body mb-2"
                 >
                   Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-muted"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -260,13 +260,13 @@ const Login = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 py-3 bg-paper border border-mist rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200"
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted hover:text-ink"
                   >
                     {showPassword ? (
                       <svg
@@ -312,16 +312,16 @@ const Login = () => {
                 <label className="flex items-center">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 bg-gray-700 border border-gray-600 rounded focus:ring-2 focus:ring-blue-500 text-blue-600"
+                    className="w-4 h-4 bg-paper border border-mist rounded-lg focus:ring-2 focus:ring-accent text-ink"
                   />
-                  <span className="ml-2 text-sm text-gray-300">
+                  <span className="ml-2 text-sm text-body">
                     Remember me
                   </span>
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                  className="text-sm text-ink hover:text-ink transition-colors duration-200"
                 >
                   Forgot password?
                 </button>
@@ -331,7 +331,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-pill bg-accent hover:bg-accent-hover text-ink py-3.5 px-4 font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Signing In..." : "Sign In"}
               </button>
@@ -339,11 +339,11 @@ const Login = () => {
 
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
-              <p className="text-gray-400">
+              <p className="text-muted">
                 Don't have an account?{" "}
                 <Link
                   to="/signup"
-                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+                  className="text-ink hover:text-ink font-medium transition-colors duration-200"
                 >
                   Sign up here
                 </Link>

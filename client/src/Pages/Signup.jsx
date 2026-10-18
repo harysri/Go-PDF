@@ -113,29 +113,29 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            <span className="text-blue-400">Go</span>
-            <span className="text-white ml-1">PDF</span>
+          <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
+            <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
+            <span className="ml-1 text-ink">PDF</span>
           </h1>
-          <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-          <p className="text-gray-400">
+          <h2 className="text-[32px] font-medium tracking-heading text-ink mb-2">Create Account</h2>
+          <p className="text-muted">
             Join us and start summarizing your PDFs
           </p>
         </div>
 
         {/* Server Error */}
         {serverError && (
-          <div className="bg-red-500 text-white p-3 rounded-md">
+          <div className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error">
             {serverError}
           </div>
         )}
 
         {/* Signup Form */}
-        <div className="bg-gray-800 p-8 rounded-xl border border-gray-700">
+        <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name Fields Row */}
             <div className="grid grid-cols-2 gap-4">
@@ -143,14 +143,14 @@ const Signup = () => {
               <div>
                 <label
                   htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-body mb-2"
                 >
                   First Name
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-muted"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -170,14 +170,14 @@ const Signup = () => {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-3 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                      errors.firstName ? "border-red-500" : "border-gray-600"
+                    className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
+                      errors.firstName ? "border-error" : "border-mist"
                     }`}
                     placeholder="John"
                   />
                 </div>
                 {errors.firstName && (
-                  <p className="text-red-400 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.firstName}
                   </p>
                 )}
@@ -187,14 +187,14 @@ const Signup = () => {
               <div>
                 <label
                   htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-body mb-2"
                 >
                   Last Name
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-muted"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -214,14 +214,14 @@ const Signup = () => {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-3 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                      errors.lastName ? "border-red-500" : "border-gray-600"
+                    className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
+                      errors.lastName ? "border-error" : "border-mist"
                     }`}
                     placeholder="Doe"
                   />
                 </div>
                 {errors.lastName && (
-                  <p className="text-red-400 text-sm mt-1">{errors.lastName}</p>
+                  <p className="text-error text-sm mt-1">{errors.lastName}</p>
                 )}
               </div>
             </div>
@@ -230,14 +230,14 @@ const Signup = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -257,14 +257,14 @@ const Signup = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                    errors.email ? "border-red-500" : "border-gray-600"
+                  className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
+                    errors.email ? "border-error" : "border-mist"
                   }`}
                   placeholder="john@example.com"
                 />
               </div>
               {errors.email && (
-                <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                <p className="text-error text-sm mt-1">{errors.email}</p>
               )}
             </div>
 
@@ -272,14 +272,14 @@ const Signup = () => {
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 Phone Number
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -299,14 +299,14 @@ const Signup = () => {
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                    errors.phoneNumber ? "border-red-500" : "border-gray-600"
+                  className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
+                    errors.phoneNumber ? "border-error" : "border-mist"
                   }`}
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
               {errors.phoneNumber && (
-                <p className="text-red-400 text-sm mt-1">
+                <p className="text-error text-sm mt-1">
                   {errors.phoneNumber}
                 </p>
               )}
@@ -316,14 +316,14 @@ const Signup = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -343,15 +343,15 @@ const Signup = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-12 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                    errors.password ? "border-red-500" : "border-gray-600"
+                  className={`w-full pl-10 pr-12 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
+                    errors.password ? "border-error" : "border-mist"
                   }`}
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted hover:text-ink"
                 >
                   {showPassword ? (
                     <svg
@@ -391,7 +391,7 @@ const Signup = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-400 text-sm mt-1">{errors.password}</p>
+                <p className="text-error text-sm mt-1">{errors.password}</p>
               )}
             </div>
 
@@ -399,14 +399,14 @@ const Signup = () => {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-body mb-2"
               >
                 Confirm Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -426,17 +426,17 @@ const Signup = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-12 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                  className={`w-full pl-10 pr-12 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
                     errors.confirmPassword
-                      ? "border-red-500"
-                      : "border-gray-600"
+                      ? "border-error"
+                      : "border-mist"
                   }`}
                   placeholder="Confirm your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted hover:text-ink"
                 >
                   {showConfirmPassword ? (
                     <svg
@@ -476,7 +476,7 @@ const Signup = () => {
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="text-red-400 text-sm mt-1">
+                <p className="text-error text-sm mt-1">
                   {errors.confirmPassword}
                 </p>
               )}
@@ -487,21 +487,21 @@ const Signup = () => {
               <input
                 id="terms"
                 type="checkbox"
-                className="w-4 h-4 bg-gray-700 border border-gray-600 rounded focus:ring-2 focus:ring-blue-500 text-blue-600"
+                className="w-4 h-4 bg-paper border border-mist rounded-lg focus:ring-2 focus:ring-accent text-ink"
                 required
               />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-300">
+              <label htmlFor="terms" className="ml-2 text-sm text-body">
                 I agree to the{" "}
                 <a
                   href="#"
-                  className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                  className="text-ink hover:text-ink transition-colors duration-200"
                 >
                   Terms of Service
                 </a>{" "}
                 and{" "}
                 <a
                   href="#"
-                  className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                  className="text-ink hover:text-ink transition-colors duration-200"
                 >
                   Privacy Policy
                 </a>
@@ -512,7 +512,7 @@ const Signup = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-pill bg-accent hover:bg-accent-hover text-ink py-3.5 px-4 font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
@@ -523,11 +523,11 @@ const Signup = () => {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-muted">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+                className="text-ink hover:text-ink font-medium transition-colors duration-200"
               >
                 Login in here
               </Link>

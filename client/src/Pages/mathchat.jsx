@@ -94,18 +94,18 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+//     <div className="min-h-screen bg-cream text-ink flex flex-col">
 //       {/* Header */}
-//       <div className="bg-gray-800 border-b border-gray-700 p-4 shadow-lg">
+//       <div className="border-b border-sand bg-cream/90 p-4 backdrop-blur-xl">
 //         <div className="max-w-4xl mx-auto flex items-center gap-3">
-//           <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+//           <div className="rounded-full bg-accent p-2 text-ink">
 //             <Calculator className="w-6 h-6" />
 //           </div>
 //           <div>
-//             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//             <h1 className="text-xl font-medium text-ink">
 //               Math Assistant
 //             </h1>
-//             <p className="text-gray-400 text-sm">
+//             <p className="text-muted text-sm">
 //               Solve mathematical problems with AI
 //             </p>
 //           </div>
@@ -124,16 +124,16 @@
 //                 }`}
 //               >
 //                 {message.type === "bot" && (
-//                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <Bot className="w-4 h-4" />
 //                   </div>
 //                 )}
 
 //                 <div
-//                   className={`max-w-[80%] rounded-2xl p-4 ${
+//                   className={`max-w-[80%] rounded-3xl p-4 ${
 //                     message.type === "user"
-//                       ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white ml-auto"
-//                       : "bg-gray-800 border border-gray-700"
+//                       ? "bg-accent text-ink ml-auto"
+//                       : "bg-sand border border-sand"
 //                   }`}
 //                 >
 //                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -145,7 +145,7 @@
 //                 </div>
 
 //                 {message.type === "user" && (
-//                   <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-mint text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <User className="w-4 h-4" />
 //                   </div>
 //                 )}
@@ -154,18 +154,18 @@
 
 //             {isLoading && (
 //               <div className="flex gap-3 justify-start">
-//                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                 <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                   <Bot className="w-4 h-4" />
 //                 </div>
-//                 <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4">
+//                 <div className="bg-sand border border-sand rounded-3xl p-4">
 //                   <div className="flex gap-1">
-//                     <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+//                     <div className="w-2 h-2 bg-stone rounded-full animate-bounce"></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.1s" }}
 //                     ></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.2s" }}
 //                     ></div>
 //                   </div>
@@ -178,7 +178,7 @@
 //       </div>
 
 //       {/* Input Area */}
-//       <div className="bg-gray-800 border-t border-gray-700 p-4">
+//       <div className="bg-sand border-t border-sand p-4">
 //         <div className="max-w-4xl mx-auto">
 //           <div className="flex gap-3 items-end">
 //             <div className="flex-1 relative">
@@ -188,7 +188,7 @@
 //                 onChange={(e) => setInputText(e.target.value)}
 //                 onKeyPress={handleKeyPress}
 //                 placeholder="Enter your math problem here... (e.g., 'Find the derivative of x³ + 2x² - 5x + 1')"
-//                 className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[50px] max-h-[120px]"
+//                 className="w-full rounded-3xl bg-paper border border-mist px-5 py-3.5 pr-12 text-ink placeholder-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent min-h-[50px] max-h-[120px]"
 //                 rows="1"
 //                 disabled={isLoading}
 //               />
@@ -197,7 +197,7 @@
 //               type="button"
 //               onClick={handleSubmit}
 //               disabled={!inputText.trim() || isLoading}
-//               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
+//               className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-ink p-3 rounded-full transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
 //             >
 //               <Send className="w-5 h-5" />
 //             </button>
@@ -214,7 +214,7 @@
 //               <button
 //                 key={suggestion}
 //                 onClick={() => setInputText(suggestion)}
-//                 className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-full text-gray-300 hover:text-white transition-colors"
+//                 className="px-3 py-1 text-xs bg-paper hover:bg-cloud border border-mist rounded-full text-body hover:text-ink transition-colors"
 //                 disabled={isLoading}
 //               >
 //                 {suggestion}
@@ -328,18 +328,18 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+//     <div className="min-h-screen bg-cream text-ink flex flex-col">
 //       {/* Header */}
-//       <div className="bg-gray-800 border-b border-gray-700 p-4 shadow-lg">
+//       <div className="border-b border-sand bg-cream/90 p-4 backdrop-blur-xl">
 //         <div className="max-w-4xl mx-auto flex items-center gap-3">
-//           <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+//           <div className="rounded-full bg-accent p-2 text-ink">
 //             <Calculator className="w-6 h-6" />
 //           </div>
 //           <div>
-//             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//             <h1 className="text-xl font-medium text-ink">
 //               Math Assistant
 //             </h1>
-//             <p className="text-gray-400 text-sm">
+//             <p className="text-muted text-sm">
 //               Solve mathematical problems with AI
 //             </p>
 //           </div>
@@ -358,16 +358,16 @@
 //                 }`}
 //               >
 //                 {message.type === "bot" && (
-//                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <Bot className="w-4 h-4" />
 //                   </div>
 //                 )}
 
 //                 <div
-//                   className={`max-w-[80%] rounded-2xl p-4 ${
+//                   className={`max-w-[80%] rounded-3xl p-4 ${
 //                     message.type === "user"
-//                       ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white ml-auto"
-//                       : "bg-gray-800 border border-gray-700"
+//                       ? "bg-accent text-ink ml-auto"
+//                       : "bg-sand border border-sand"
 //                   }`}
 //                 >
 //                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -379,7 +379,7 @@
 //                 </div>
 
 //                 {message.type === "user" && (
-//                   <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-mint text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <User className="w-4 h-4" />
 //                   </div>
 //                 )}
@@ -388,18 +388,18 @@
 
 //             {isLoading && (
 //               <div className="flex gap-3 justify-start">
-//                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                 <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                   <Bot className="w-4 h-4" />
 //                 </div>
-//                 <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4">
+//                 <div className="bg-sand border border-sand rounded-3xl p-4">
 //                   <div className="flex gap-1">
-//                     <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+//                     <div className="w-2 h-2 bg-stone rounded-full animate-bounce"></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.1s" }}
 //                     ></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.2s" }}
 //                     ></div>
 //                   </div>
@@ -412,7 +412,7 @@
 //       </div>
 
 //       {/* Input Area */}
-//       <div className="bg-gray-800 border-t border-gray-700 p-4">
+//       <div className="bg-sand border-t border-sand p-4">
 //         <div className="max-w-4xl mx-auto">
 //           <div className="flex gap-3 items-end">
 //             <div className="flex-1 relative">
@@ -422,7 +422,7 @@
 //                 onChange={(e) => setInputText(e.target.value)}
 //                 onKeyPress={handleKeyPress}
 //                 placeholder="Enter your math problem here... (e.g., 'Find the derivative of x³ + 2x² - 5x + 1')"
-//                 className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[50px] max-h-[120px]"
+//                 className="w-full rounded-3xl bg-paper border border-mist px-5 py-3.5 pr-12 text-ink placeholder-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent min-h-[50px] max-h-[120px]"
 //                 rows="1"
 //                 disabled={isLoading}
 //               />
@@ -431,7 +431,7 @@
 //               type="button"
 //               onClick={handleSubmit}
 //               disabled={!inputText.trim() || isLoading}
-//               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
+//               className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-ink p-3 rounded-full transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
 //             >
 //               <Send className="w-5 h-5" />
 //             </button>
@@ -448,7 +448,7 @@
 //               <button
 //                 key={suggestion}
 //                 onClick={() => setInputText(suggestion)}
-//                 className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-full text-gray-300 hover:text-white transition-colors"
+//                 className="px-3 py-1 text-xs bg-paper hover:bg-cloud border border-mist rounded-full text-body hover:text-ink transition-colors"
 //                 disabled={isLoading}
 //               >
 //                 {suggestion}
@@ -789,18 +789,18 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+//     <div className="min-h-screen bg-cream text-ink flex flex-col">
 //       {/* Header */}
-//       <div className="bg-gray-800 border-b border-gray-700 p-4 shadow-lg">
+//       <div className="border-b border-sand bg-cream/90 p-4 backdrop-blur-xl">
 //         <div className="max-w-4xl mx-auto flex items-center gap-3">
-//           <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+//           <div className="rounded-full bg-accent p-2 text-ink">
 //             <Calculator className="w-6 h-6" />
 //           </div>
 //           <div>
-//             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//             <h1 className="text-xl font-medium text-ink">
 //               Math Assistant
 //             </h1>
-//             <p className="text-gray-400 text-sm">
+//             <p className="text-muted text-sm">
 //               Solve mathematical problems with AI
 //             </p>
 //           </div>
@@ -819,16 +819,16 @@
 //                 }`}
 //               >
 //                 {message.type === "bot" && (
-//                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <Bot className="w-4 h-4" />
 //                   </div>
 //                 )}
 
 //                 <div
-//                   className={`max-w-[80%] rounded-2xl p-4 ${
+//                   className={`max-w-[80%] rounded-3xl p-4 ${
 //                     message.type === "user"
-//                       ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white ml-auto"
-//                       : "bg-gray-800 border border-gray-700"
+//                       ? "bg-accent text-ink ml-auto"
+//                       : "bg-sand border border-sand"
 //                   }`}
 //                 >
 //                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -840,7 +840,7 @@
 //                 </div>
 
 //                 {message.type === "user" && (
-//                   <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                   <div className="bg-mint text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                     <User className="w-4 h-4" />
 //                   </div>
 //                 )}
@@ -849,18 +849,18 @@
 
 //             {isLoading && (
 //               <div className="flex gap-3 justify-start">
-//                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+//                 <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
 //                   <Bot className="w-4 h-4" />
 //                 </div>
-//                 <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4">
+//                 <div className="bg-sand border border-sand rounded-3xl p-4">
 //                   <div className="flex gap-1">
-//                     <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+//                     <div className="w-2 h-2 bg-stone rounded-full animate-bounce"></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.1s" }}
 //                     ></div>
 //                     <div
-//                       className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+//                       className="w-2 h-2 bg-stone rounded-full animate-bounce"
 //                       style={{ animationDelay: "0.2s" }}
 //                     ></div>
 //                   </div>
@@ -873,7 +873,7 @@
 //       </div>
 
 //       {/* Input Area */}
-//       <div className="bg-gray-800 border-t border-gray-700 p-4">
+//       <div className="bg-sand border-t border-sand p-4">
 //         <div className="max-w-4xl mx-auto">
 //           <div className="flex gap-3 items-end">
 //             <div className="flex-1 relative">
@@ -883,7 +883,7 @@
 //                 onChange={(e) => setInputText(e.target.value)}
 //                 onKeyPress={handleKeyPress}
 //                 placeholder="Enter or speak your math problem..."
-//                 className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[50px] max-h-[120px]"
+//                 className="w-full rounded-3xl bg-paper border border-mist px-5 py-3.5 pr-12 text-ink placeholder-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent min-h-[50px] max-h-[120px]"
 //                 rows="1"
 //                 disabled={isLoading}
 //                 style={{ paddingRight: "3rem" }} // extra space for mic
@@ -894,8 +894,8 @@
 //                 onClick={toggleMic}
 //                 className={`absolute top-1/2 right-4 transform -translate-y-1/2 p-2 rounded-full ${
 //                   isListening
-//                     ? "bg-red-600 text-white"
-//                     : "bg-gray-600 text-gray-200"
+//                     ? "bg-error text-ink"
+//                     : "bg-paper text-ink"
 //                 }`}
 //                 style={{ zIndex: 2 }}
 //                 tabIndex={-1}
@@ -907,7 +907,7 @@
 //               type="button"
 //               onClick={handleSubmit}
 //               disabled={!inputText.trim() || isLoading}
-//               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
+//               className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-ink p-3 rounded-full transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
 //             >
 //               <Send className="w-5 h-5" />
 //             </button>
@@ -924,7 +924,7 @@
 //               <button
 //                 key={suggestion}
 //                 onClick={() => setInputText(suggestion)}
-//                 className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-full text-gray-300 hover:text-white transition-colors"
+//                 className="px-3 py-1 text-xs bg-paper hover:bg-cloud border border-mist rounded-full text-body hover:text-ink transition-colors"
 //                 disabled={isLoading}
 //               >
 //                 {suggestion}
@@ -1328,18 +1328,18 @@ function MathChat() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+    <div className="min-h-screen bg-cream text-ink flex flex-col">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4 shadow-lg">
+      <div className="border-b border-sand bg-cream/90 p-4 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+          <div className="rounded-full bg-accent p-2 text-ink">
             <Calculator className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-xl font-medium text-ink">
               Math Assistant
             </h1>
-            <p className="text-gray-400 text-sm">
+            <p className="text-muted text-sm">
               Solve mathematical problems with AI
             </p>
           </div>
@@ -1358,16 +1358,16 @@ function MathChat() {
                 }`}
               >
                 {message.type === "bot" && (
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+                  <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
 
                 <div
-                  className={`max-w-[80%] rounded-2xl p-4 ${
+                  className={`max-w-[80%] rounded-3xl p-4 ${
                     message.type === "user"
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white ml-auto"
-                      : "bg-gray-800 border border-gray-700"
+                      ? "bg-accent text-ink ml-auto"
+                      : "bg-sand border border-sand"
                   }`}
                 >
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -1379,7 +1379,7 @@ function MathChat() {
                 </div>
 
                 {message.type === "user" && (
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+                  <div className="bg-mint text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
                     <User className="w-4 h-4" />
                   </div>
                 )}
@@ -1388,18 +1388,18 @@ function MathChat() {
 
             {isLoading && (
               <div className="flex gap-3 justify-start">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
+                <div className="bg-accent text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
-                <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4">
+                <div className="bg-sand border border-sand rounded-3xl p-4">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-stone rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-stone rounded-full animate-bounce"
                       style={{ animationDelay: "0.1s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-stone rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                   </div>
@@ -1412,7 +1412,7 @@ function MathChat() {
       </div>
 
       {/* Input Area */}
-      <div className="bg-gray-800 border-t border-gray-700 p-4">
+      <div className="bg-sand border-t border-sand p-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex gap-3 items-end">
             <div className="flex-1 relative">
@@ -1422,7 +1422,7 @@ function MathChat() {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Enter or speak your math problem..."
-                className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[50px] max-h-[120px]"
+                className="w-full rounded-3xl bg-paper border border-mist px-5 py-3.5 pr-12 text-ink placeholder-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent min-h-[50px] max-h-[120px]"
                 rows="1"
                 disabled={isLoading}
                 style={{ paddingRight: "3rem" }}
@@ -1433,8 +1433,8 @@ function MathChat() {
                 onClick={toggleMic}
                 className={`absolute top-1/2 right-4 transform -translate-y-1/2 p-2 rounded-full ${
                   isListening
-                    ? "bg-red-600 text-white animate-pulse"
-                    : "bg-gray-600 text-gray-200 hover:bg-gray-500"
+                    ? "bg-error text-ink animate-pulse"
+                    : "bg-paper text-ink hover:bg-cloud"
                 }`}
                 style={{ zIndex: 2 }}
                 tabIndex={-1}
@@ -1446,7 +1446,7 @@ function MathChat() {
               type="button"
               onClick={handleSubmit}
               disabled={!inputText.trim() || isLoading}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
+              className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-ink p-3 rounded-full transition-all duration-200 flex items-center justify-center min-w-[50px] h-[50px]"
             >
               <Send className="w-5 h-5" />
             </button>
@@ -1463,7 +1463,7 @@ function MathChat() {
               <button
                 key={suggestion}
                 onClick={() => setInputText(suggestion)}
-                className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-full text-gray-300 hover:text-white transition-colors"
+                className="px-3 py-1 text-xs bg-paper hover:bg-cloud border border-mist rounded-full text-body hover:text-ink transition-colors"
                 disabled={isLoading}
               >
                 {suggestion}
