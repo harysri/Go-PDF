@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Build output
+client/dist/
+client/dist-ssr/
+build/
+dist/
+*.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+server/.env
+server/.env.*
+
+# Runtime data (uploaded PDFs, extracted images)
+server/uploads/*
+!server/uploads/.gitkeep
+*.pdf.tmp
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Caches
+.cache/
+.vite/
+.parcel-cache/
+.eslintcache
+.npm/
+coverage/
+.nyc_output/
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# Misc
+*.local
+*.pem
