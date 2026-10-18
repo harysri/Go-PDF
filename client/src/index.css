@@ -88,3 +88,24 @@
   margin: 0 auto;
   padding: 1.5rem;
 }
+
+/* Typeset math inside chat responses (see Components/FormatResponse.jsx) */
+.format-response .katex {
+  font-size: 1.05em;
+  color: #1d1d1d;
+}
+
+.format-response .katex-display {
+  margin: 0.75rem 0;
+  padding: 2px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.format-response .katex-display > .katex {
+  white-space: nowrap;
+}
+
+.format-response .katex-display::-webkit-scrollbar {
+  height: 6px;
+}

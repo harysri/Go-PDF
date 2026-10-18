@@ -942,178 +942,8 @@
 // new code with voice functionality
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Calculator, Mic } from "lucide-react";
-
-// --- Utility: Format LaTeX math to textbook style ---
-const formatMathResponse = (text) => {
-  if (!text) return "";
-
-  let formatted = text;
-
-  // Remove inline/display math markers
-  formatted = formatted.replace(/\$/g, "").replace(/\\\(|\\\)|\\\[|\\\]/g, "");
-
-  // Fractions \frac{a}{b} -> (a/b)
-  formatted = formatted.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, "($1/$2)");
-
-  // Superscripts x^{2} -> x² (digits and variables)
-  formatted = formatted.replace(/\^\{([^}]+)\}/g, (_, content) => {
-    const superMap = {
-      0: "⁰",
-      1: "¹",
-      2: "²",
-      3: "³",
-      4: "⁴",
-      5: "⁵",
-      6: "⁶",
-      7: "⁷",
-      8: "⁸",
-      9: "⁹",
-      "+": "⁺",
-      "-": "⁻",
-      "=": "⁼",
-      "(": "⁽",
-      ")": "⁾",
-      n: "ⁿ",
-      i: "ⁱ",
-    };
-    return content
-      .split("")
-      .map((c) => superMap[c] || c)
-      .join("");
-  });
-  // simple superscript: x^2
-  formatted = formatted.replace(/\^([0-9])/g, (_, num) => {
-    const superMap = {
-      0: "⁰",
-      1: "¹",
-      2: "²",
-      3: "³",
-      4: "⁴",
-      5: "⁵",
-      6: "⁶",
-      7: "⁷",
-      8: "⁸",
-      9: "⁹",
-    };
-    return superMap[num] || num;
-  });
-
-  // Subscripts x_{1} -> x₁
-  formatted = formatted.replace(/_\{([^}]+)\}/g, (_, content) => {
-    const subMap = {
-      0: "₀",
-      1: "₁",
-      2: "₂",
-      3: "₃",
-      4: "₄",
-      5: "₅",
-      6: "₆",
-      7: "₇",
-      8: "₈",
-      9: "₉",
-      "+": "₊",
-      "-": "₋",
-      "=": "₌",
-      "(": "₍",
-      ")": "₎",
-      a: "ₐ",
-      e: "ₑ",
-      i: "ᵢ",
-      j: "ⱼ",
-      o: "ₒ",
-      r: "ᵣ",
-      u: "ᵤ",
-      v: "ᵥ",
-      x: "ₓ",
-    };
-    return content
-      .split("")
-      .map((c) => subMap[c] || c)
-      .join("");
-  });
-  // simple subscript: x_1
-  formatted = formatted.replace(/_([0-9])/g, (_, num) => {
-    const subMap = {
-      0: "₀",
-      1: "₁",
-      2: "₂",
-      3: "₃",
-      4: "₄",
-      5: "₅",
-      6: "₆",
-      7: "₇",
-      8: "₈",
-      9: "₉",
-    };
-    return subMap[num] || num;
-  });
-
-  // Roots
-  formatted = formatted.replace(/\\sqrt\{([^}]+)\}/g, "√($1)");
-  formatted = formatted.replace(/\\sqrt\[([0-9]+)\]\{([^}]+)\}/g, "($1√$2)"); // nth root
-
-  // Greek letters (common ones)
-  const greek = {
-    "\\alpha": "α",
-    "\\beta": "β",
-    "\\gamma": "γ",
-    "\\delta": "δ",
-    "\\epsilon": "ε",
-    "\\theta": "θ",
-    "\\lambda": "λ",
-    "\\pi": "π",
-    "\\rho": "ρ",
-    "\\sigma": "σ",
-    "\\tau": "τ",
-    "\\phi": "φ",
-    "\\chi": "χ",
-    "\\psi": "ψ",
-    "\\omega": "ω",
-    "\\Delta": "Δ",
-    "\\Pi": "Π",
-    "\\Sigma": "Σ",
-    "\\Phi": "Φ",
-    "\\Omega": "Ω",
-  };
-  Object.entries(greek).forEach(([k, v]) => {
-    formatted = formatted.replace(new RegExp(k, "g"), v);
-  });
-
-  // Common symbols
-  const symbols = {
-    "\\times": "×",
-    "\\div": "÷",
-    "\\pm": "±",
-    "\\leq": "≤",
-    "\\geq": "≥",
-    "\\neq": "≠",
-    "\\approx": "≈",
-    "\\equiv": "≡",
-    "\\cdot": "·",
-    "\\infty": "∞",
-    "\\nabla": "∇",
-    "\\rightarrow": "→",
-    "\\leftarrow": "←",
-    "\\leftrightarrow": "↔",
-    "\\Rightarrow": "⇒",
-    "\\Leftarrow": "⇐",
-    "\\Leftrightarrow": "⇔",
-    "\\sum": "∑",
-    "\\prod": "∏",
-    "\\int": "∫",
-    "\\oint": "∮",
-  };
-  Object.entries(symbols).forEach(([k, v]) => {
-    formatted = formatted.replace(new RegExp(k, "g"), v);
-  });
-  formatted = formatted.replace(/\\cdots/g, "…");
-
-  // Remove any remaining backslashes
-  formatted = formatted.replace(/\\/g, "");
-
-  return formatted.trim();
-};
+import { Send, Bot, Calculator, Mic } from "lucide-react";
+import FormatResponse from "../Components/FormatResponse";
 
 const formatTimestamp = (date) => {
   let hours = date.getHours();
@@ -1276,10 +1106,8 @@ function MathChat() {
     });
     const data = await response.json();
 
-    // Format math expressions
-    return formatMathResponse(
-      data.answer || "Sorry, I couldn't process your request."
-    );
+    // Raw markdown / LaTeX — rendered by <FormatResponse />
+    return data.answer || "Sorry, I couldn't process your request.";
   };
 
   const handleSubmit = async () => {
@@ -1370,19 +1198,18 @@ function MathChat() {
                       : "bg-sand border border-sand"
                   }`}
                 >
-                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                    {message.content}
-                  </div>
+                  {message.type === "bot" ? (
+                    <FormatResponse content={message.content} />
+                  ) : (
+                    <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                      {message.content}
+                    </div>
+                  )}
                   <div className="text-xs opacity-60 mt-2">
                     {message.timestamp}
                   </div>
                 </div>
 
-                {message.type === "user" && (
-                  <div className="bg-mint text-ink p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4" />
-                  </div>
-                )}
               </div>
             ))}
 

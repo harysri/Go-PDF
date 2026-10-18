@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
@@ -7,9 +8,11 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Summarization from "./Pages/Summarization";
 import ResetPassword from "./Pages/ResetPassword";
-import MathChat from "./Pages/mathchat";
 import ProfilePage from "./Pages/Profile";
 import { Toaster } from "react-hot-toast";
+
+// MathChat pulls in the markdown + KaTeX renderer, so load it with the route.
+const MathChat = lazy(() => import("./Pages/mathchat"));
 
 function App() {
   return (
@@ -38,15 +41,23 @@ function App() {
       />
       <div className="appearance-none">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/Signup" element={<Signup />} />
-          <Route path="/Summarize" element={<Summarization />} />
-          <Route path="/MathChat" element={<MathChat />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-        </Routes>
+        <Suspense
+          fallback={
+            <div className="flex min-h-[60vh] items-center justify-center text-sm text-muted">
+              Loading…
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/Signup" element={<Signup />} />
+            <Route path="/Summarize" element={<Summarization />} />
+            <Route path="/MathChat" element={<MathChat />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </div>
     </Router>
