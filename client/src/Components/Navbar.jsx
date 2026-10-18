@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -7,6 +7,33 @@ const Navbar = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const isLoggedIn = localStorage.getItem("token");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Close the avatar menu on navigation or when clicking outside of it
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handlePointerDown = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
 
   // Get initials from firstName and lastName
   const getAvatarInitials = (firstName, lastName) => {
@@ -21,15 +48,17 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
+    setMenuOpen(false);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    toast.success("Logged out successfully");
+    toast.success("You have been signed out");
     navigate("/login");
   };
 
-  const hideAuthLinks = ["/login", "/signup", "/summarize"].includes(
-    location.pathname.toLowerCase()
-  );
+  // Auth links are only shown on the public pages; protected/target pages hide them
+  const authLinkPages = ["/", "/login", "/signup"];
+  const showAuthLinks =
+    !isLoggedIn && authLinkPages.includes(location.pathname.toLowerCase());
 
   // Avatar component with color based on email hash
   const UserAvatar = ({ firstName, lastName, email }) => {
@@ -55,7 +84,7 @@ const Navbar = () => {
     return (
       <div
         className={`flex h-10 w-10 items-center justify-center rounded-full ${bgColor} text-sm font-medium text-ink ring-1 ring-sand`}
-        title={email ? `${firstName} ${lastName} (${email})` : "Guest"}
+        title="Profile menu"
       >
         {initials}
       </div>
@@ -71,14 +100,20 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-sand bg-cream/90 backdrop-blur-xl">
-      <div className="mx-auto max-w-[1132px] px-6 lg:px-10">
+      <div
+        className={`mx-auto max-w-[1132px] px-6 lg:px-10 ${
+          isLoggedIn ? "pr-20 sm:pr-24 lg:pr-24" : ""
+        }`}
+      >
         <div className="flex h-[80px] items-center justify-between gap-4">
           {/* Logo / Project Title */}
           <Link
             to="/"
             className="flex items-baseline text-[22px] font-medium leading-none tracking-heading text-ink"
           >
-            <span className="rounded-lg bg-accent px-2 py-0.5 text-ink">Go</span>
+            <span className="rounded-lg bg-accent px-2 py-0.5 text-ink">
+              Go
+            </span>
             <span className="ml-1 text-ink">PDF</span>
           </Link>
 
@@ -88,7 +123,7 @@ const Navbar = () => {
               Home
             </Link>
 
-            {!hideAuthLinks && !isLoggedIn && (
+            {showAuthLinks && (
               <>
                 <Link to="/login" className={navLinkClass("/login")}>
                   Login
@@ -109,60 +144,64 @@ const Navbar = () => {
                 </Link>
               </>
             )}
-
-            {/* User Profile Section */}
-            <div
-              className={`group relative ml-1 ${
-                isLoggedIn ? "" : "hidden sm:block"
-              }`}
-            >
-              <div className="flex cursor-pointer items-center gap-3">
-                <UserAvatar
-                  firstName={user?.firstName}
-                  lastName={user?.lastName}
-                  email={user?.email}
-                />
-                {isLoggedIn && (
-                  <div className="hidden text-right md:block">
-                    <p className="text-sm font-medium leading-tight text-ink">
-                      {user?.firstName} {user?.lastName}
-                    </p>
-                    <p className="max-w-[140px] truncate text-xs leading-tight text-muted">
-                      {user?.email || ""}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Dropdown Menu */}
-              {isLoggedIn && (
-                <div className="absolute right-0 z-50 mt-3 hidden w-52 overflow-hidden rounded-2xl border border-sand bg-paper py-1.5 group-hover:block">
-                  <div className="border-b border-sand px-4 py-2.5">
-                    <p className="text-sm text-ink">
-                      {user?.username || user?.firstName || "User"}
-                    </p>
-                    <p className="truncate text-xs text-muted">
-                      {user?.email || ""}
-                    </p>
-                  </div>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2.5 text-sm text-body transition-colors hover:bg-cloud hover:text-ink"
-                  >
-                    Profile Settings
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2.5 text-left text-sm text-body transition-colors hover:bg-cloud hover:text-ink"
-                  >
-                    Sign out
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
+      {isLoggedIn && (
+        <div
+          ref={menuRef}
+          className="absolute right-4 top-2"
+          onMouseEnter={() => setMenuOpen(true)}
+          onMouseLeave={() => setMenuOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            className="flex items-center rounded-pill p-1 transition-colors duration-200 hover:bg-cloud/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/20"
+          >
+            <UserAvatar
+              firstName={user?.firstName}
+              lastName={user?.lastName}
+              email={user?.email}
+            />
+          </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 top-full z-50 pt-3">
+              <div
+                role="menu"
+                className="w-56 overflow-hidden rounded-2xl border border-sand bg-paper py-1.5 shadow-[0_16px_40px_rgba(29,29,29,0.12)]"
+              >
+                <div className="border-b border-sand px-4 py-2.5">
+                  <p className="text-sm text-ink">
+                    {user?.username || user?.firstName || "User"}
+                  </p>
+                  <p className="truncate text-xs text-muted">
+                    {user?.email || ""}
+                  </p>
+                </div>
+                <Link
+                  to="/profile"
+                  role="menuitem"
+                  className="block px-4 py-2.5 text-sm text-body transition-colors hover:bg-cloud hover:text-ink"
+                >
+                  Profile Settings
+                </Link>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleLogout}
+                  className="block w-full px-4 py-2.5 text-left text-sm text-body transition-colors hover:bg-cloud hover:text-ink"
+                >
+                  Sign out
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
