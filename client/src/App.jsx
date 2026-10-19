@@ -9,6 +9,7 @@ import Signup from "./Pages/Signup";
 import Summarization from "./Pages/Summarization";
 import ResetPassword from "./Pages/ResetPassword";
 import ProfilePage from "./Pages/Profile";
+import AskPDF from "./Pages/AskPDF";
 import { Toaster } from "react-hot-toast";
 
 // MathChat pulls in the markdown + KaTeX renderer, so load it with the route.
@@ -54,6 +55,7 @@ function App() {
             <Route path="/Signup" element={<Signup />} />
             <Route path="/Summarize" element={<Summarization />} />
             <Route path="/MathChat" element={<MathChat />} />
+            <Route path="/AskPDF" element={<AskPDF />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Routes>

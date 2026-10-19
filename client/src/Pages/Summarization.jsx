@@ -1074,6 +1074,7 @@
 
 import React, { useState, useEffect } from "react";
 import { PDFDocument } from "pdf-lib";
+import FormatResponse from "../Components/FormatResponse";
 
 const Summarization = () => {
   const [dragActive, setDragActive] = useState(false);
@@ -1082,6 +1083,7 @@ const Summarization = () => {
   const [summary, setSummary] = useState("");
   const [summaryLength, setSummaryLength] = useState("medium");
   const [summaryType, setSummaryType] = useState("general");
+  const [summaryMeta, setSummaryMeta] = useState(null);
   const [error, setError] = useState(null);
 
   // New states for translation
@@ -1189,6 +1191,7 @@ const Summarization = () => {
 
       const data = await response.json();
       setSummary(data.summary);
+      setSummaryMeta(data.meta || null);
     } catch (err) {
       console.error("Summarization error:", err);
       setError(
@@ -1344,6 +1347,7 @@ const Summarization = () => {
   const removeFile = () => {
     setUploadedFile(null);
     setSummary("");
+    setSummaryMeta(null);
     setTranslatedText("");
     setExtractedImages([]);
     setError(null);
@@ -1696,14 +1700,10 @@ const Summarization = () => {
               >
                 {summary ? (
                   <div className="bg-paper p-4 rounded-xl">
-                    <div className="prose prose-invert max-w-none">
-                      <div className="text-ink leading-relaxed whitespace-pre-line">
-                        {summary}
-                      </div>
-                    </div>
+                    <FormatResponse content={summary} />
 
                     {/* Summary Stats */}
-                    <div className="mt-4 pt-4 border-t border-mist">
+                    <div className="mt-4 pt-4 border-t border-mist space-y-1">
                       <div className="flex justify-between text-sm text-muted">
                         <span>Words: {summary.split(" ").length}</span>
                         <span>Characters: {summary.length}</span>
@@ -1712,6 +1712,22 @@ const Summarization = () => {
                           {Math.ceil(summary.split(" ").length / 200)} min
                         </span>
                       </div>
+                      {summaryMeta && (
+                        <div className="flex justify-between text-xs text-muted">
+                          <span>
+                            Pages: {summaryMeta.pages} &middot; Sections named:{" "}
+                            {summaryMeta.notes}
+                          </span>
+                          <span>
+                            {summaryMeta.chunks} chunks &middot;{" "}
+                            {summaryMeta.reduceLevels > 0
+                              ? `${summaryMeta.reduceLevels} reduce level(s)`
+                              : "direct reduce"}{" "}
+                            &middot; {summaryMeta.inputTokens} in /{" "}
+                            {summaryMeta.outputTokens} out tokens
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -1841,13 +1857,7 @@ const Summarization = () => {
                     )}
                   </button>
 
-                  {translatedText && (
-                    <div className="mt-4 rounded-2xl border border-sand bg-cream p-4">
-                      <div className="text-ink leading-relaxed whitespace-pre-line">
-                        {translatedText}
-                      </div>
-                    </div>
-                  )}
+                  <FormatResponse content={translatedText} />
                 </div>
               </div>
             )}

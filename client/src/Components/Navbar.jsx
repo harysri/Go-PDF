@@ -109,7 +109,7 @@ const Navbar = () => {
           {/* Logo / Project Title */}
           <Link
             to="/"
-            className="flex items-baseline text-[22px] font-medium leading-none tracking-heading text-ink"
+            className="flex items-baseline text-[28px] font-medium leading-none tracking-heading text-ink"
           >
             <span className="rounded-lg bg-accent px-2 py-0.5 text-ink">
               Go
