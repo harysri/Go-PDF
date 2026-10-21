@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -15,6 +15,7 @@ const Login = () => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setFormData({
@@ -46,7 +47,8 @@ const Login = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       toast.success(`Welcome back, ${data.user?.firstName || "there"}!`);
-      navigate("/summarize");
+      // Returns the user to the protected page that sent them here, if any.
+      navigate(location.state?.from || "/summarize", { replace: true });
     } catch (err) {
       setError(err.message);
     } finally {

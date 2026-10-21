@@ -142,6 +142,9 @@ const Navbar = () => {
                 <Link to="/summarize" className={navLinkClass("/summarize")}>
                   Summarize
                 </Link>
+                <Link to="/AskPDF" className={navLinkClass("/askpdf")}>
+                  Ask PDF
+                </Link>
               </>
             )}
           </div>

@@ -1,5 +1,12 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ScrollToTop from "./Components/ScrollToTop";
@@ -14,6 +21,23 @@ import { Toaster } from "react-hot-toast";
 
 // MathChat pulls in the markdown + KaTeX renderer, so load it with the route.
 const MathChat = lazy(() => import("./Pages/mathchat"));
+
+/**
+ * Layout route for pages that need a signed-in user. The token is what Navbar
+ * uses to show the Summarize / Ask PDF links, so the same check keeps those
+ * pages closed when someone opens the URL directly while signed out.
+ *
+ * /login reads `state.from` to send the user back after signing in.
+ */
+function RequireAuth() {
+  const location = useLocation();
+
+  if (!localStorage.getItem("token")) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
+  return <Outlet />;
+}
 
 function App() {
   return (
@@ -53,9 +77,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/Signup" element={<Signup />} />
-            <Route path="/Summarize" element={<Summarization />} />
+            <Route element={<RequireAuth />}>
+              <Route path="/Summarize" element={<Summarization />} />
+              <Route path="/AskPDF" element={<AskPDF />} />
+            </Route>
             <Route path="/MathChat" element={<MathChat />} />
-            <Route path="/AskPDF" element={<AskPDF />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Routes>

@@ -4,7 +4,7 @@ import FormatResponse from "../Components/FormatResponse";
 
 /**
  * AskPDF — Chat with your PDF using RAG + Hybrid Search
- * Route: /ask-pdf
+ * Route: /AskPDF (protected — requires a signed-in session)
  *
  * Backend: POST /api/ask-pdf/upload  -> { documentId, pages, chunks }
  *          POST /api/ask-pdf/ask     -> { answer, sources: [{ page, snippet, score }] }
@@ -12,6 +12,13 @@ import FormatResponse from "../Components/FormatResponse";
  */
 
 const API_BASE = "http://localhost:5000";
+
+// The route is protected, so every call carries the session token. The server
+// rejects uploads/questions without it (401/403).
+const authHeaders = () => {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 // >1 exchange only helps if the backend can condense follow-ups into a
 // standalone retrieval query — which it does, so send a little history.
@@ -75,6 +82,7 @@ const AskPDF = () => {
     if (documentId) {
       fetch(`${API_BASE}/api/ask-pdf/${documentId}`, {
         method: "DELETE",
+        headers: authHeaders(),
       }).catch(() => {
         // Best effort: orphaned vectors are harmless, the id is gone locally.
       });
@@ -107,12 +115,15 @@ const AskPDF = () => {
 
       const response = await fetch(`${API_BASE}/api/ask-pdf/upload`, {
         method: "POST",
+        headers: authHeaders(),
         body,
       });
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.error || `Upload failed (${response.status})`);
+        throw new Error(
+          data.error || data.message || `Upload failed (${response.status})`,
+        );
       }
 
       if (uploadSeq.current !== seq) return;
@@ -177,7 +188,7 @@ const AskPDF = () => {
     try {
       const response = await fetch(`${API_BASE}/api/ask-pdf/ask`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({
           documentId: file.id,
           question: q,
@@ -189,7 +200,9 @@ const AskPDF = () => {
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.error || `Request failed (${response.status})`);
+        throw new Error(
+          data.error || data.message || `Request failed (${response.status})`,
+        );
       }
 
       setMessages((m) => [

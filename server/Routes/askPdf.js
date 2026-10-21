@@ -14,6 +14,7 @@ const {
 } = require("../lib/rag/qdrant");
 const { rerankChunks } = require("../lib/rag/rerank");
 const { condenseQuestion, answerQuestion } = require("../lib/rag/llm");
+const { authenticateUser } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -49,8 +50,10 @@ const NOT_FOUND_ANSWER = "I couldn't find that in this document.";
 // ---------------------------------------------------------------------------
 // POST /api/ask-pdf/upload  ->  { documentId, pages, chunks }
 // Chunk -> embed -> upsert. Hybrid search needs both vectors up front.
+// Signed-in only: the Ask PDF page is a protected route, so the endpoints it
+// calls require the same bearer token (GET /health stays public for probes).
 // ---------------------------------------------------------------------------
-router.post("/upload", async (req, res) => {
+router.post("/upload", authenticateUser, async (req, res) => {
   const startedAt = Date.now();
 
   try {
@@ -115,7 +118,7 @@ router.post("/upload", async (req, res) => {
 // POST /api/ask-pdf/ask  ->  { answer, sources }
 // Query -> condense -> embed -> hybrid RRF -> rerank -> generate.
 // ---------------------------------------------------------------------------
-router.post("/ask", async (req, res) => {
+router.post("/ask", authenticateUser, async (req, res) => {
   const startedAt = Date.now();
   const timings = {};
 
@@ -212,7 +215,7 @@ router.post("/ask", async (req, res) => {
 // ---------------------------------------------------------------------------
 // DELETE /api/ask-pdf/:documentId
 // ---------------------------------------------------------------------------
-router.delete("/:documentId", async (req, res) => {
+router.delete("/:documentId", authenticateUser, async (req, res) => {
   try {
     const { documentId } = req.params;
     if (!documentId) return res.status(400).json({ error: "documentId is required" });
