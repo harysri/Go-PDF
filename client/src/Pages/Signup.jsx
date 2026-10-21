@@ -121,10 +121,10 @@ const Signup = () => {
             <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
             <span className="ml-1 text-ink">PDF</span>
           </h1>
-          <h2 className="text-[32px] font-medium tracking-heading text-ink mb-2">Create Account</h2>
-          <p className="text-muted">
-            Join us and start summarizing your PDFs
-          </p>
+          <h2 className="text-[32px] font-medium tracking-heading text-ink mb-2">
+            Create Account
+          </h2>
+          <p className="text-muted">Join us and start summarizing your PDFs</p>
         </div>
 
         {/* Server Error */}
@@ -173,13 +173,11 @@ const Signup = () => {
                     className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
                       errors.firstName ? "border-error" : "border-mist"
                     }`}
-                    placeholder="John"
+                    placeholder="First Name"
                   />
                 </div>
                 {errors.firstName && (
-                  <p className="text-error text-sm mt-1">
-                    {errors.firstName}
-                  </p>
+                  <p className="text-error text-sm mt-1">{errors.firstName}</p>
                 )}
               </div>
 
@@ -217,7 +215,7 @@ const Signup = () => {
                     className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
                       errors.lastName ? "border-error" : "border-mist"
                     }`}
-                    placeholder="Doe"
+                    placeholder="Last Name"
                   />
                 </div>
                 {errors.lastName && (
@@ -260,7 +258,7 @@ const Signup = () => {
                   className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
                     errors.email ? "border-error" : "border-mist"
                   }`}
-                  placeholder="john@example.com"
+                  placeholder="john123@example.com"
                 />
               </div>
               {errors.email && (
@@ -302,13 +300,11 @@ const Signup = () => {
                   className={`w-full pl-10 pr-3 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
                     errors.phoneNumber ? "border-error" : "border-mist"
                   }`}
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="Phone Number"
                 />
               </div>
               {errors.phoneNumber && (
-                <p className="text-error text-sm mt-1">
-                  {errors.phoneNumber}
-                </p>
+                <p className="text-error text-sm mt-1">{errors.phoneNumber}</p>
               )}
             </div>
 
@@ -427,9 +423,7 @@ const Signup = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`w-full pl-10 pr-12 py-3 bg-paper border rounded-xl text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-200 ${
-                    errors.confirmPassword
-                      ? "border-error"
-                      : "border-mist"
+                    errors.confirmPassword ? "border-error" : "border-mist"
                   }`}
                   placeholder="Confirm your password"
                 />
