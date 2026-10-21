@@ -892,5 +892,10 @@ if (require("./Routes/translation")) {
   app.use("/api/translate", translationRoute);
 }
 
+// Ask-PDF: chunk -> embed (Ollama) -> Qdrant hybrid (dense + BM25, RRF)
+//          -> Cohere rerank -> Gemini answer
+const askPdfRoute = require("./Routes/askPdf");
+app.use("/api/ask-pdf", askPdfRoute);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

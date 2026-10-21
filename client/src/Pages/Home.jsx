@@ -297,7 +297,7 @@ const Home = () => {
               Get Started Free
             </Link>
             <Link
-              to="/AskPDF"
+              to="/signup"
               className="w-full rounded-2xl border border-ink px-6 py-3 text-center text-base font-medium text-ink transition-colors duration-300 hover:bg-ink hover:text-cream sm:w-auto"
             >
               Try Ask PDF →

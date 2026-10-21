@@ -15,6 +15,7 @@ dist/
 !.env.example
 server/.env
 server/.env.*
+!server/.env.example
 
 # Runtime data (uploaded PDFs, extracted images)
 server/uploads/*

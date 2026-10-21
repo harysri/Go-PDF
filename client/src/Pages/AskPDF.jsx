@@ -1,26 +1,21 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import AskPDFComposer from "../Components/AskPDFComposer";
+import FormatResponse from "../Components/FormatResponse";
 
 /**
  * AskPDF — Chat with your PDF using RAG + Hybrid Search
  * Route: /ask-pdf
  *
- * Frontend-only scaffold. Swap the simulated RAG call inside `askQuestion`
- * with your real backend endpoint, e.g.:
- *
- *   const res = await fetch("/api/ask", {
- *     method: "POST",
- *     headers: { "Content-Type": "application/json" },
- *     body: JSON.stringify({
- *       documentId: file.id,
- *       question: input,
- *       // hybrid search: dense vector retrieval + sparse keyword/BM25
- *       searchMode: "hybrid",
- *       topK: 8,
- *     }),
- *   });
- *   const data = await res.json(); // { answer, sources: [{ page, snippet, score }] }
+ * Backend: POST /api/ask-pdf/upload  -> { documentId, pages, chunks }
+ *          POST /api/ask-pdf/ask     -> { answer, sources: [{ page, snippet, score }] }
+ *          DELETE /api/ask-pdf/:id   -> removes the document's vectors
  */
+
+const API_BASE = "http://localhost:5000";
+
+// >1 exchange only helps if the backend can condense follow-ups into a
+// standalone retrieval query — which it does, so send a little history.
+const HISTORY_LIMIT = 5;
 
 const SUGGESTED_QUESTIONS = [
   "What is this document about?",
@@ -36,10 +31,13 @@ const AskPDF = () => {
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   const chatScrollRef = useRef(null);
   const fileInputRef = useRef(null);
   const dragCounter = useRef(0);
+  // Guards against an older upload finishing after a newer one was started.
+  const uploadSeq = useRef(0);
 
   // ── Auto-scroll + themed "scroll to bottom" button ────────────────────
   const scrollToBottom = useCallback((smooth = true) => {
@@ -59,25 +57,84 @@ const AskPDF = () => {
     scrollToBottom();
   }, [messages, isThinking, scrollToBottom]);
 
-  // ── PDF upload (drag & drop / click) ──────────────────────────────────
-  const processFile = (pdf) => {
+  // ── Reset local chat state (and drop the indexed document) ────────────
+  const resetDocument = useCallback(() => {
+    const documentId = file?.id;
+
+    // Bump the sequence so an in-flight upload can't resurrect the chat.
+    uploadSeq.current += 1;
+
+    setFile(null);
+    setMessages([]);
+    setInput("");
+    setIsIndexed(false);
+    setShowScrollBtn(false);
+    setUploadError("");
+    setIsUploading(false);
+
+    if (documentId) {
+      fetch(`${API_BASE}/api/ask-pdf/${documentId}`, {
+        method: "DELETE",
+      }).catch(() => {
+        // Best effort: orphaned vectors are harmless, the id is gone locally.
+      });
+    }
+  }, [file]);
+
+  // ── PDF upload: chunk + embed + index on the server ───────────────────
+  const processFile = async (pdf) => {
     if (!pdf) return;
-    if (pdf.type !== "application/pdf") {
-      alert("Please upload a PDF file.");
+
+    const isPdf =
+      pdf.type === "application/pdf" || /\.pdf$/i.test(pdf.name || "");
+    if (!isPdf) {
+      setUploadError("Please upload a PDF file.");
       return;
     }
+
+    const seq = uploadSeq.current + 1;
+    uploadSeq.current = seq;
+
+    setUploadError("");
     setFile({ name: pdf.name, size: pdf.size, id: null });
     setMessages([]);
     setIsIndexed(false);
     setIsUploading(true);
 
-    // Simulated upload + chunking + embedding (RAG indexing) phase.
-    // Replace with: POST /api/upload → returns { documentId }
-    setTimeout(() => {
-      setFile((f) => ({ ...f, id: `doc_${Date.now()}` }));
-      setIsUploading(false);
+    try {
+      const body = new FormData();
+      body.append("file", pdf);
+
+      const response = await fetch(`${API_BASE}/api/ask-pdf/upload`, {
+        method: "POST",
+        body,
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || `Upload failed (${response.status})`);
+      }
+
+      if (uploadSeq.current !== seq) return;
+
+      setFile({
+        name: data.filename || pdf.name,
+        size: pdf.size,
+        id: data.documentId,
+        pages: data.pages,
+        chunks: data.chunks,
+      });
       setIsIndexed(true);
-    }, 1800);
+    } catch (error) {
+      if (uploadSeq.current !== seq) return;
+      setFile(null);
+      setUploadError(
+        error.message ||
+          "Could not index this PDF. Check the server and try again.",
+      );
+    } finally {
+      if (uploadSeq.current === seq) setIsUploading(false);
+    }
   };
 
   const onDrop = (e) => {
@@ -100,36 +157,61 @@ const AskPDF = () => {
   const askQuestion = async (question) => {
     const q = question.trim();
     if (!q || isThinking) return;
+    if (!file?.id) {
+      setUploadError(
+        "Upload a PDF first — there is nothing indexed to search yet.",
+      );
+      return;
+    }
+
+    // Captured BEFORE the state update: reading `messages` after setMessages
+    // would still return the previous array and duplicate the question.
+    const history = messages
+      .map(({ role, content }) => ({ role, content }))
+      .slice(-HISTORY_LIMIT);
 
     setInput("");
     setMessages((m) => [...m, { role: "user", content: q }]);
     setIsThinking(true);
 
-    // Simulated RAG + hybrid-search response.
-    // Hybrid search = dense vector similarity (semantic) + BM25/keyword
-    // retrieval, fused (e.g. RRF) and reranked before the LLM answers.
-    await new Promise((r) => setTimeout(r, 1400));
+    try {
+      const response = await fetch(`${API_BASE}/api/ask-pdf/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentId: file.id,
+          question: q,
+          history,
+          // hybrid search: dense vector retrieval + sparse BM25, fused with RRF
+          topK: 8,
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
 
-    setMessages((m) => [
-      ...m,
-      {
-        role: "assistant",
-        content: `Based on your document **${file?.name}**, here's what I found (hybrid search across semantic + keyword indexes):`,
-        sources: [
-          {
-            page: 1,
-            snippet: "Most relevant retrieved chunk will appear here…",
-            score: 0.94,
-          },
-          {
-            page: 4,
-            snippet: "Second-ranked passage from the reranked results…",
-            score: 0.87,
-          },
-        ],
-      },
-    ]);
-    setIsThinking(false);
+      if (!response.ok) {
+        throw new Error(data.error || `Request failed (${response.status})`);
+      }
+
+      setMessages((m) => [
+        ...m,
+        {
+          role: "assistant",
+          content: data.answer,
+          sources: data.sources || [],
+        },
+      ]);
+    } catch (error) {
+      setMessages((m) => [
+        ...m,
+        {
+          role: "assistant",
+          content: `**Could not answer that.** ${error.message}`,
+          isError: true,
+        },
+      ]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   return (
@@ -163,7 +245,9 @@ const AskPDF = () => {
                 onDragOver={(e) => e.preventDefault()}
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => {
+                  if (!isUploading) fileInputRef.current?.click();
+                }}
                 className="cursor-pointer rounded-3xl border-2 border-dashed border-sand bg-paper p-8 text-center transition-colors duration-300 hover:border-ink"
               >
                 <input
@@ -199,6 +283,24 @@ const AskPDF = () => {
                 )}
               </div>
 
+              {uploadError && (
+                <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-caption text-red-700">
+                  <svg
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 8v5m0 3h.01" />
+                  </svg>
+                  <span>{uploadError}</span>
+                </div>
+              )}
+
               {/* Uploaded file card */}
               {file && !isUploading && (
                 <div className="rounded-3xl border border-sand bg-paper p-6">
@@ -224,12 +326,7 @@ const AskPDF = () => {
                       <p className="text-caption text-muted">Processing…</p>
                     </div>
                     <button
-                      onClick={() => {
-                        setFile(null);
-                        setMessages([]);
-                        setIsIndexed(false);
-                        setShowScrollBtn(false);
-                      }}
+                      onClick={resetDocument}
                       className="rounded-full border border-sand px-3 py-1 text-caption text-body transition-colors hover:border-ink hover:text-ink"
                     >
                       Remove
@@ -264,16 +361,17 @@ const AskPDF = () => {
                   <p className="truncate text-base font-medium text-ink">
                     {file.name}
                   </p>
+                  {(file.pages || file.chunks) && (
+                    <p className="text-caption text-muted">
+                      {file.pages ? `${file.pages} pages` : null}
+                      {file.pages && file.chunks ? " · " : null}
+                      {file.chunks ? `${file.chunks} indexed passages` : null}
+                    </p>
+                  )}
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    setFile(null);
-                    setMessages([]);
-                    setInput("");
-                    setIsIndexed(false);
-                    setShowScrollBtn(false);
-                  }}
+                  onClick={resetDocument}
                   className="shrink-0 rounded-full border border-sand px-4 py-2 text-sm text-body transition-colors hover:border-ink hover:text-ink"
                 >
                   Change PDF
@@ -319,10 +417,20 @@ const AskPDF = () => {
                               : "rounded-bl-lg border border-sand bg-cream text-ink"
                           }`}
                         >
-                          <p className="text-base leading-relaxed">
-                            {msg.content}
-                          </p>
-                          {msg.sources && (
+                          {msg.role === "user" ? (
+                            <p className="whitespace-pre-wrap text-base leading-relaxed">
+                              {msg.content}
+                            </p>
+                          ) : (
+                            <div
+                              className={`text-base leading-relaxed ${
+                                msg.isError ? "text-red-700" : ""
+                              }`}
+                            >
+                              <FormatResponse content={msg.content} />
+                            </div>
+                          )}
+                          {msg.sources && msg.sources.length > 0 && (
                             <div className="mt-4 space-y-2 border-t border-sand pt-3">
                               {msg.sources.map((s, j) => (
                                 <div
