@@ -109,3 +109,67 @@
 .format-response .katex-display::-webkit-scrollbar {
   height: 6px;
 }
+
+.voice-listening-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: fit-content;
+  margin: 0 auto 0.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #dbdac8;
+  border-radius: 9999px;
+  background: #f1efe2;
+  color: #575757;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.voice-waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 1.25rem;
+}
+
+.voice-waveform__bar {
+  width: 3px;
+  height: 1rem;
+  border-radius: 9999px;
+  background: #8c8b84;
+  animation: voice-wave 0.8s ease-in-out infinite alternate;
+}
+
+.voice-waveform__bar:nth-child(2),
+.voice-waveform__bar:nth-child(6) {
+  animation-delay: 0.15s;
+}
+
+.voice-waveform__bar:nth-child(3),
+.voice-waveform__bar:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.voice-waveform__bar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes voice-wave {
+  from {
+    transform: scaleY(0.3);
+    background: #8c8b84;
+  }
+
+  to {
+    transform: scaleY(1);
+    background: #a33a2b;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-waveform__bar {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+}

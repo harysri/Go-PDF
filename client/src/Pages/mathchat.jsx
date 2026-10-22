@@ -1164,9 +1164,7 @@ function MathChat() {
             <Calculator className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-medium text-ink">
-              Math Assistant
-            </h1>
+            <h1 className="text-xl font-medium text-ink">Math Assistant</h1>
             <p className="text-muted text-sm">
               Solve mathematical problems with AI
             </p>
@@ -1209,7 +1207,6 @@ function MathChat() {
                     {message.timestamp}
                   </div>
                 </div>
-
               </div>
             ))}
 
@@ -1241,6 +1238,16 @@ function MathChat() {
       {/* Input Area */}
       <div className="bg-sand border-t border-sand p-4">
         <div className="max-w-4xl mx-auto">
+          {isListening && (
+            <div className="voice-listening-indicator" role="status">
+              <div className="voice-waveform" aria-hidden="true">
+                {Array.from({ length: 7 }, (_, index) => (
+                  <span className="voice-waveform__bar" key={index} />
+                ))}
+              </div>
+              <span>Listening...</span>
+            </div>
+          )}
           <div className="flex gap-3 items-end">
             <div className="flex-1 relative">
               <textarea
