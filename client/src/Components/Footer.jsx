@@ -92,7 +92,7 @@ const Footer = () => {
         <div className="border-t border-sand py-7">
           <div className="flex flex-col items-start justify-between gap-3 md:flex-row">
             <p className="text-caption text-muted">
-              © 2025 Go PDF. All rights reserved.
+              © {new Date().getFullYear()} Go PDF. All rights reserved.
             </p>
           </div>
         </div>

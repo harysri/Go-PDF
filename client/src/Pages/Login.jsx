@@ -1,6 +1,35 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { AnimatePresence, motion } from "framer-motion";
+
+const pageStagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.08 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 22 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: { opacity: 0, y: -12, scale: 0.98, transition: { duration: 0.2 } },
+};
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -95,10 +124,20 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <motion.div
+      className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
+      <motion.div
+        className="max-w-md w-full space-y-8"
+        variants={pageStagger}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Header */}
-        <div className="text-center">
+        <motion.div variants={fadeUp} className="text-center">
           <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
             <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
             <span className="ml-1 text-ink">PDF</span>
@@ -111,28 +150,47 @@ const Login = () => {
               ? "Enter your email to reset password"
               : "Sign in to your account to continue"}
           </p>
-        </div>
+        </motion.div>
 
         {/* Error Message */}
-        {error && (
-          <div className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error">{error}</div>
-        )}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              key="login-error"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error"
+            >
+              {error}
+            </motion.div>
+          )}
 
-        {forgotMessage && (
-          <div
-            className={`p-3 rounded-xl ${
-              forgotMessage.includes("Failed")
-                ? "border border-error/40 bg-error/10 text-error"
-                : "border border-mint/40 bg-mint/10 text-ink"
-            }`}
-          >
-            {forgotMessage}
-          </div>
-        )}
+          {forgotMessage && (
+            <motion.div
+              key="forgot-message"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className={`p-3 rounded-xl ${
+                forgotMessage.includes("Failed")
+                  ? "border border-error/40 bg-error/10 text-error"
+                  : "border border-mint/40 bg-mint/10 text-ink"
+              }`}
+            >
+              {forgotMessage}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
+        <AnimatePresence mode="wait">
         {showForgotPassword ? (
           /* Forgot Password Form */
-          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
+          <motion.div
+            key="forgot-password"
+            variants={cardVariants}
+            className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand"
+          >
             <form className="space-y-6" onSubmit={handleForgotPassword}>
               <div>
                 <label
@@ -189,10 +247,14 @@ const Login = () => {
                 </button>
               </div>
             </form>
-          </div>
+          </motion.div>
         ) : (
           /* Login Form */
-          <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
+          <motion.div
+            key="login-form"
+            variants={cardVariants}
+            className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand"
+          >
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Email Field */}
               <div>
@@ -351,10 +413,11 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-          </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
   );
 };
 

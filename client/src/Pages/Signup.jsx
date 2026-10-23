@@ -1,6 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { AnimatePresence, motion } from "framer-motion";
+
+const pageStagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.08 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 22 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -113,10 +131,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-md w-full space-y-8">
+    <motion.div
+      className="min-h-screen bg-cream flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
+      <motion.div
+        className="max-w-md w-full space-y-8"
+        variants={pageStagger}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Header */}
-        <div className="text-center">
+        <motion.div variants={fadeUp} className="text-center">
           <h1 className="text-[28px] font-medium tracking-heading text-ink mb-1">
             <span className="rounded-lg bg-accent px-2 text-ink">Go</span>
             <span className="ml-1 text-ink">PDF</span>
@@ -125,17 +153,28 @@ const Signup = () => {
             Create Account
           </h2>
           <p className="text-muted">Join us and start summarizing your PDFs</p>
-        </div>
+        </motion.div>
 
         {/* Server Error */}
-        {serverError && (
-          <div className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error">
-            {serverError}
-          </div>
-        )}
+        <AnimatePresence>
+          {serverError && (
+            <motion.div
+              key="signup-error"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="border border-error/40 bg-error/10 p-3 rounded-xl text-sm text-error"
+            >
+              {serverError}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Signup Form */}
-        <div className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand">
+        <motion.div
+          variants={fadeUp}
+          className="bg-sand p-8 sm:p-10 rounded-3xl border border-sand"
+        >
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name Fields Row */}
             <div className="grid grid-cols-2 gap-4">
@@ -527,9 +566,9 @@ const Signup = () => {
               </Link>
             </p>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
