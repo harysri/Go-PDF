@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 48" width="132" height="48">
+  <!-- Full Outer Rectangular Cream Background -->
+  <rect x="0" y="0" width="132" height="48" fill="#F3F1E7" />
+
+  <!-- Pill-shaped Lime Badge for "Go" -->
+  <rect x="0" y="0" width="56" height="48" rx="24" fill="#D2F542" />
+
+  <!-- Pure Black Text Group -->
+  <g font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Inter, Helvetica, Arial, sans-serif" font-size="30" font-weight="500" fill="#000000">
+    <!-- "Go" centered inside the squarish lime badge -->
+    <text x="28" y="34" text-anchor="middle">Go</text>
+    
+    <!-- "PDF" centered on the remaining cream background -->
+    <text x="88" y="34" font-size="26" text-anchor="middle">PDF</text>
+  </g>
+</svg>
