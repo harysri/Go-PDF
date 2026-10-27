@@ -120,7 +120,7 @@ Reading a 60-page report to find three numbers is a bad use of an afternoon. GoP
 
 ## 📸 Screenshots
 
-- **Home Page** ![Home page](screenshots/home.png)
+- **Home Page** ![Home page](screenshots/Home.png)
 
 - **Login Page** ![Login page](screenshots/Login.png)
 
@@ -264,8 +264,8 @@ Reading a 60-page report to find three numbers is a bad use of an afternoon. GoP
 
 ```bash
 # 1. Clone
-git clone <" ">
-cd <" ">
+git clone https://github.com/harysri/Go-PDF.git
+cd Go-PDF
 
 # 2. Backend
 cd server
