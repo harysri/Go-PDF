@@ -126,13 +126,28 @@ Reading a 60-page report to find three numbers is a bad use of an afternoon. GoP
 
 - **Signup Page** ![Signup page](screenshots/Signup.png)
 
-- **PDF Summary Page** ![Signup page](screenshots/PDF-Summary.png)
+- **PDF Summary Page** ![Summary page](screenshots/PDF-Summary.png)
 
-- **Chat with PDF Page** ![Signup page](screenshots/Ask.png)
+- **Chat with PDF Page** ![AskPdf page](screenshots/Ask.png)
 
 ---
 
 ## 🎬 Demo
+### PDF Summary Demo
+
+
+https://github.com/user-attachments/assets/8801cd39-34f1-424f-9cb7-96ed5fc0889c
+
+
+
+
+### Chat with PDF Demo
+
+
+https://github.com/user-attachments/assets/e44c7759-c742-4092-97f6-5f69be268872
+
+
+
 
 ---
 
