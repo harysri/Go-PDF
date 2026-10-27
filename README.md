@@ -133,21 +133,14 @@ Reading a 60-page report to find three numbers is a bad use of an afternoon. GoP
 ---
 
 ## 🎬 Demo
-### PDF Summary Demo
 
+### PDF Summary Demo
 
 https://github.com/user-attachments/assets/8801cd39-34f1-424f-9cb7-96ed5fc0889c
 
-
-
-
 ### Chat with PDF Demo
 
-
 https://github.com/user-attachments/assets/e44c7759-c742-4092-97f6-5f69be268872
-
-
-
 
 ---
 
@@ -414,7 +407,7 @@ If `ok` is `false`, the failing stage's message tells you what to fix (missing k
 
 ## 👤 Author
 
-**[Srihari Satheeshan]**
+**Srihari Satheeshan**
 
 - GitHub: [@harysri](https://github.com/harysri)
 - Email: [sriharisatheeshan820@gmail.com](mailto:sriharisatheeshan820@gmail.com)

@@ -19,7 +19,7 @@ const Footer = () => {
             </p>
             <div className="flex space-x-5">
               <a
-                href="#"
+                href="https://github.com/harysri/Go-PDF"
                 aria-label="GitHub"
                 className="text-muted hover:text-ink transition-colors duration-200"
               >
@@ -78,7 +78,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="https://github.com/harysri/Go-PDF/blob/main/README.md"
                   className="text-muted hover:text-ink transition-colors duration-200"
                 >
                   Documentation
