@@ -897,5 +897,9 @@ if (require("./Routes/translation")) {
 const askPdfRoute = require("./Routes/askPdf");
 app.use("/api/ask-pdf", askPdfRoute);
 
+// Text-to-speech: Kokoro-82M, chunked, returns a single WAV file
+const speechRoute = require("./Routes/speech");
+app.use("/api/speech", speechRoute);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

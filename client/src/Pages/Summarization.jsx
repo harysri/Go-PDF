@@ -1226,7 +1226,7 @@ const Summarization = () => {
     } catch (err) {
       console.error("Summarization error:", err);
       setError(
-        err.message || "An error occurred while summarizing the document"
+        err.message || "An error occurred while summarizing the document",
       );
     } finally {
       setIsProcessing(false);
@@ -1292,7 +1292,7 @@ const Summarization = () => {
             } catch (err) {
               console.warn(
                 `Failed to extract image ${ref} from page ${pageIndex + 1}:`,
-                err
+                err,
               );
             }
           }
@@ -1563,8 +1563,8 @@ const Summarization = () => {
                   dragActive
                     ? "border-accent bg-accent/10"
                     : uploadedFile
-                    ? "border-mint bg-mint/10"
-                    : "border-mist hover:border-accent"
+                      ? "border-mint bg-mint/10"
+                      : "border-mist hover:border-accent"
                 }`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
@@ -1763,8 +1763,8 @@ const Summarization = () => {
                         isSynthesizing
                           ? "bg-paper text-muted cursor-wait"
                           : isSpeaking
-                          ? "bg-ink text-cream hover:bg-body"
-                          : "bg-paper hover:bg-cloud"
+                            ? "bg-ink text-cream hover:bg-body"
+                            : "bg-paper hover:bg-cloud"
                       }`}
                       title={isSpeaking ? "Stop audio" : "Listen to summary"}
                       aria-label={
@@ -2184,9 +2184,7 @@ const Summarization = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-stone rounded-full"></div>
-                  <span className="text-body">
-                    Statistics & Probability
-                  </span>
+                  <span className="text-body">Statistics & Probability</span>
                 </div>
               </div>
 
@@ -2231,9 +2229,7 @@ const Summarization = () => {
 
                   <div className="bg-sand rounded-3xl p-4 mr-8">
                     <div className="text-sm text-body">
-                      <div className="font-medium text-ink mb-2">
-                        Solution:
-                      </div>
+                      <div className="font-medium text-ink mb-2">Solution:</div>
                       Using the power rule:
                       <br />
                       • d/dx(x³) = 3x²
