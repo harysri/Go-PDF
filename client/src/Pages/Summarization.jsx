@@ -1072,7 +1072,7 @@
 
 // export default Summarization;
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PDFDocument } from "pdf-lib";
 import FormatResponse from "../Components/FormatResponse";
 
@@ -1095,6 +1095,36 @@ const Summarization = () => {
   const [extractedImages, setExtractedImages] = useState([]);
   const [isExtractingImages, setIsExtractingImages] = useState(false);
   const [extractionStatus, setExtractionStatus] = useState("");
+
+  // Text to speech (Kokoro, rendered by the backend)
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const audioRef = useRef(null);
+  // Synthesis is slow, so the last rendered summary is kept for instant replay.
+  const audioCacheRef = useRef({ text: "", url: null });
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setIsSpeaking(false);
+  };
+
+  const playAudio = async (url) => {
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.onended = () => stopAudio();
+    audio.onerror = () => {
+      stopAudio();
+      setError("Could not play the generated audio.");
+    };
+
+    await audio.play();
+    setIsSpeaking(true);
+  };
 
   // Language options (Updated for Indian Regional Support)
   const languageOptions = [
@@ -1168,6 +1198,7 @@ const Summarization = () => {
       return;
     }
 
+    stopAudio();
     setIsProcessing(true);
     setError(null);
     setSummary("");
@@ -1345,6 +1376,7 @@ const Summarization = () => {
   };
 
   const removeFile = () => {
+    stopAudio();
     setUploadedFile(null);
     setSummary("");
     setSummaryMeta(null);
@@ -1391,6 +1423,69 @@ const Summarization = () => {
     }
   };
 
+  // Convert the summary to speech and play it. A second click stops playback.
+  const handleSpeak = async () => {
+    if (!summary || isSynthesizing) return;
+
+    if (audioRef.current) {
+      stopAudio();
+      return;
+    }
+
+    setError(null);
+
+    // Replay the cached render instead of paying for synthesis again.
+    const cache = audioCacheRef.current;
+    if (cache.text === summary && cache.url) {
+      try {
+        await playAudio(cache.url);
+      } catch (err) {
+        console.error("Audio playback error:", err);
+        setError("Could not play the generated audio.");
+      }
+      return;
+    }
+
+    setIsSynthesizing(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/speech", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: summary }),
+      });
+
+      if (!response.ok) {
+        let message = "Failed to generate audio";
+        try {
+          const errorData = await response.json();
+          message = errorData.error || message;
+        } catch {
+          // Non-JSON error body: keep the generic message.
+        }
+        throw new Error(message);
+      }
+
+      const blob = await response.blob();
+      stopAudio();
+
+      if (audioCacheRef.current.url) {
+        URL.revokeObjectURL(audioCacheRef.current.url);
+      }
+
+      const url = URL.createObjectURL(blob);
+      audioCacheRef.current = { text: summary, url };
+
+      await playAudio(url);
+    } catch (err) {
+      console.error("Text-to-speech error:", err);
+      stopAudio();
+      setError(err.message || "An error occurred while generating speech");
+    } finally {
+      setIsSynthesizing(false);
+    }
+  };
+
   const copyTranslation = async () => {
     if (!translatedText) return;
     try {
@@ -1409,6 +1504,16 @@ const Summarization = () => {
       });
     };
   }, [extractedImages]);
+
+  // Stop playback and release the cached audio when leaving the page
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) audioRef.current.pause();
+      if (audioCacheRef.current.url) {
+        URL.revokeObjectURL(audioCacheRef.current.url);
+      }
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-cream text-ink py-12 px-4 sm:px-6 lg:px-8">
@@ -1651,6 +1756,47 @@ const Summarization = () => {
 
                 {summary && (
                   <div className="flex space-x-2">
+                    <button
+                      onClick={handleSpeak}
+                      disabled={isSynthesizing}
+                      className={`rounded-full p-2 transition-colors duration-200 ${
+                        isSynthesizing
+                          ? "bg-paper text-muted cursor-wait"
+                          : isSpeaking
+                          ? "bg-ink text-cream hover:bg-body"
+                          : "bg-paper hover:bg-cloud"
+                      }`}
+                      title={isSpeaking ? "Stop audio" : "Listen to summary"}
+                      aria-label={
+                        isSpeaking ? "Stop audio" : "Listen to summary"
+                      }
+                    >
+                      {isSynthesizing ? (
+                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-ink"></div>
+                      ) : isSpeaking ? (
+                        <svg
+                          className="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M6 6h12v12H6z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H3v6h3l5 4V5z"
+                          />
+                        </svg>
+                      )}
+                    </button>
                     <button
                       onClick={copySummary}
                       className="rounded-full p-2 bg-paper hover:bg-cloud transition-colors duration-200"
