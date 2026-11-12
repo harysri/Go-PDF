@@ -1,5 +1,61 @@
-import React from "react";
 import { Link } from "react-router-dom";
+
+const ScrollToTopButton = () => {
+  const handleClick = () => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label="Scroll back to top"
+      className="group relative inline-flex h-[88px] w-[88px] shrink-0 items-center justify-center rounded-full border border-ink bg-paper text-ink transition-colors duration-200 hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+    >
+      {/* Curved label, repeated twice so the ring of text reads closed */}
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        viewBox="0 0 100 100"
+        aria-hidden="true"
+      >
+        <defs>
+          <path
+            id="footer-back-to-top-arc"
+            d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"
+          />
+        </defs>
+        <text
+          className="fill-ink"
+          fontSize="9"
+          fontWeight="500"
+          letterSpacing="4.5"
+        >
+          <textPath href="#footer-back-to-top-arc" startOffset="0">
+            BACK TO TOP · BACK TO TOP ·
+          </textPath>
+        </text>
+      </svg>
+
+      <svg
+        className="relative h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 19V5" />
+        <path d="M5 12l7-7 7 7" />
+      </svg>
+    </button>
+  );
+};
 
 const Footer = () => {
   return (
@@ -90,10 +146,11 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-sand py-7">
-          <div className="flex flex-col items-start justify-between gap-3 md:flex-row">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <p className="text-caption text-muted">
               © {new Date().getFullYear()} Go PDF. All rights reserved.
             </p>
+            <ScrollToTopButton />
           </div>
         </div>
       </div>
