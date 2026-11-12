@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ScrollToTopButton = () => {
   const handleClick = () => {
@@ -57,7 +59,142 @@ const ScrollToTopButton = () => {
   );
 };
 
+// Id of the persistent nudge toast, so its own controls dismiss only itself.
+let nudgeToastId = null;
+
+/**
+ * Brand-styled nudge for visitors who have read all the way down the page.
+ * Rendered inside a react-hot-toast card, so the app's Toaster (top-right)
+ * handles positioning, stacking and the enter/exit animation.
+ */
+
+const SignupNudge = () => (
+  <div className="relative flex items-start gap-3 pr-7 text-left">
+    <button
+      type="button"
+      onClick={() => toast.dismiss(nudgeToastId)}
+      aria-label="Dismiss sign up reminder"
+      className="absolute right-0 top-0 inline-flex h-6 w-6 items-center justify-center rounded-full text-muted transition-colors duration-200 hover:bg-sand hover:text-ink"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        className="h-3.5 w-3.5"
+        aria-hidden="true"
+      >
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+
+    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-ink">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4 w-4"
+        aria-hidden="true"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M19 8v6" />
+        <path d="M22 11h-6" />
+      </svg>
+    </span>
+
+    <div>
+      <p className="text-[15px] font-medium leading-tight text-ink">
+        Please sign up to continue
+      </p>
+      <p className="mt-1 text-[13px] leading-snug text-muted">
+        Create a free account to summarize PDFs and ask questions about them.
+      </p>
+
+      <div className="mt-3 flex items-center gap-2">
+        <Link
+          to="/Signup"
+          onClick={() => toast.dismiss(nudgeToastId)}
+          className="inline-flex items-center rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-cream transition-colors duration-200 hover:bg-ink/90"
+        >
+          Create account
+        </Link>
+        <button
+          type="button"
+          onClick={() => toast.dismiss(nudgeToastId)}
+          className="rounded-full px-2 py-1.5 text-[13px] text-muted transition-colors duration-200 hover:text-ink"
+        >
+          Maybe later
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 const Footer = () => {
+  const footerBottomRef = useRef(null);
+  const hasScrolledRef = useRef(false);
+  const hasNudgedRef = useRef(false);
+
+  // Nudge signed-out visitors once per visit, and only after they have actually
+  // scrolled here — short pages show the footer on load without any scrolling.
+  useEffect(() => {
+    const markScrolled = () => {
+      hasScrolledRef.current = true;
+    };
+    window.addEventListener("scroll", markScrolled, { passive: true });
+
+    const target = footerBottomRef.current;
+    if (!target) {
+      return () => window.removeEventListener("scroll", markScrolled);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (
+          !entry.isIntersecting ||
+          !hasScrolledRef.current ||
+          hasNudgedRef.current ||
+          localStorage.getItem("token")
+        ) {
+          return;
+        }
+
+        hasNudgedRef.current = true;
+        observer.disconnect();
+
+        // No duration: the card stays until the visitor closes it themselves.
+        nudgeToastId = toast(<SignupNudge />, {
+          duration: Infinity,
+          style: {
+            background: "#f1efe2",
+            color: "#1d1d1d",
+            border: "1px solid #1d1d1d",
+            borderRadius: "20px",
+            padding: "16px",
+            maxWidth: "360px",
+            fontSize: "14px",
+            fontWeight: 400,
+            boxShadow: "6px 6px 0 0 rgba(29, 29, 29, 0.12)",
+          },
+        });
+      },
+      { threshold: 0.99 }
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", markScrolled);
+    };
+  }, []);
+
   return (
     <footer className="border-t border-sand bg-cream px-6 lg:px-10">
       <div className="mx-auto max-w-[1132px]">
@@ -145,7 +282,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-sand py-7">
+        <div ref={footerBottomRef} className="border-t border-sand py-7">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <p className="text-caption text-muted">
               © {new Date().getFullYear()} Go PDF. All rights reserved.
