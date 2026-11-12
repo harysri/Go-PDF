@@ -206,9 +206,15 @@
 // export default Home;
 
 //updated with ask padf features
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+} from "framer-motion";
 import InkGridPulse from "../Components/InkGridPulse";
 import revenueBreakdownImage from "../assets/revenue-breakdown.svg";
 import ragPipelineImage from "../assets/rag-pipeline.svg";
@@ -292,10 +298,12 @@ const steps = [
   },
 ];
 
+// `target` drives the scroll-triggered count-up; values without one (24/7)
+// are not countable as a single number and render as-is.
 const stats = [
-  { value: "10K+", label: "Documents Processed" },
-  { value: "95%", label: "Accuracy Rate" },
-  { value: "30s", label: "Average Processing Time" },
+  { value: "10K+", target: 10, suffix: "K+", label: "Documents Processed" },
+  { value: "95%", target: 95, suffix: "%", label: "Accuracy Rate" },
+  { value: "30s", target: 30, suffix: "s", label: "Average Processing Time" },
   { value: "24/7", label: "Available" },
 ];
 
@@ -356,10 +364,149 @@ const sectionReveal = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
 };
 
+// Features: the cards arrive one after another instead of in one block.
+const cardStagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+// Use cases: each card slides in from its own side, alternating position.
+const slideInFrom = (x) => ({
+  hidden: { opacity: 0, x },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+});
+
 // Preview playground tabs. They advance on their own, and a manual click
 // restarts the countdown for the newly selected tab.
 const previewTabs = ["summary", "translation", "images", "chat"];
 const previewRotationMs = 2000;
+
+// Hero preview summary. Split into parts so the bold phrase keeps its styling
+// and the clipboard still receives the exact sentence the user sees.
+const previewSummary = {
+  lead: "This document details the fiscal year growth strategy, highlighting a ",
+  highlight: "34% expansion",
+  tail: " in cloud infrastructure revenue and operational streamlining. Key risks involve supply chain constraints and localized regulatory hurdles across global markets.",
+};
+
+const previewSummaryText = `${previewSummary.lead}${previewSummary.highlight}${previewSummary.tail}`;
+
+// Clipboard API needs a secure context and permission; the legacy path keeps
+// the preview working when either is unavailable.
+const copyText = async (text) => {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // Denied or blocked — fall through to execCommand.
+  }
+
+  try {
+    const field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+    document.body.appendChild(field);
+    field.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(field);
+    return copied;
+  } catch {
+    return false;
+  }
+};
+
+// Reading progress: a 3px accent bar pinned to the top of the viewport that
+// fills left to right with the page, then flashes once when you reach the end.
+const ScrollProgressBar = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const [isFlashing, setIsFlashing] = useState(false);
+  const wasCompleteRef = useRef(false);
+  const flashTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (value) => {
+      const isComplete = value >= 0.995;
+
+      // Only flash on arrival at the bottom, not on every scroll event there.
+      if (isComplete && !wasCompleteRef.current) {
+        setIsFlashing(true);
+        clearTimeout(flashTimeoutRef.current);
+        flashTimeoutRef.current = setTimeout(() => setIsFlashing(false), 700);
+      }
+
+      wasCompleteRef.current = isComplete;
+    });
+
+    return () => {
+      unsubscribe();
+      clearTimeout(flashTimeoutRef.current);
+    };
+  }, [scrollYProgress]);
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-accent outline outline-1 outline-ink"
+      style={{ scaleX }}
+      animate={isFlashing ? { opacity: [1, 0.35, 1, 0.35, 1] } : { opacity: 1 }}
+      transition={isFlashing ? { duration: 0.7, ease: "easeInOut" } : { duration: 0.15 }}
+    />
+  );
+};
+
+// Counts the numeric stats up from zero the first time the row scrolls into
+// view. Jumping straight to the final numbers under prefers-reduced-motion
+// keeps the values truthful without the movement.
+const useStatCountUp = (items, durationMs = 1400) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const [counts, setCounts] = useState(() => items.map(() => 0));
+
+  useEffect(() => {
+    if (!inView) return undefined;
+
+    const targets = items.map((item) =>
+      typeof item.target === "number" ? item.target : null,
+    );
+
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setCounts(targets.map((target) => target ?? 0));
+      return undefined;
+    }
+
+    let frame = 0;
+    const startedAt = performance.now();
+
+    const step = (now) => {
+      const progress = Math.min((now - startedAt) / durationMs, 1);
+      const eased = 1 - (1 - progress) ** 3;
+      setCounts(
+        targets.map((target) =>
+          target === null ? 0 : Math.round(eased * target),
+        ),
+      );
+      if (progress < 1) frame = requestAnimationFrame(step);
+    };
+
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [inView, items, durationMs]);
+
+  return { ref, counts };
+};
 
 const Home = () => {
   // Live Demo Preview State
@@ -405,11 +552,59 @@ const Home = () => {
     },
   ]);
 
+  // Stats row counts up once it is on screen; `stats` is module-level, so the
+  // observer only ever fires for this one row.
+  const statsCount = useStatCountUp(stats);
+
+  // Copy feedback for the Summary tab: brief accent flash, then a checkmark
+  // tucked in for two seconds before the icon returns to normal.
+  const [copyState, setCopyState] = useState("idle"); // "idle" | "flash" | "copied"
+  const copyTimersRef = useRef([]);
+
+  useEffect(
+    () => () => {
+      copyTimersRef.current.forEach(clearTimeout);
+      copyTimersRef.current = [];
+    },
+    [],
+  );
+
+  const handleCopyPreviewSummary = async () => {
+    const copied = await copyText(previewSummaryText);
+    if (!copied) return;
+
+    copyTimersRef.current.forEach(clearTimeout);
+    setCopyState("flash");
+    copyTimersRef.current = [
+      setTimeout(() => setCopyState("copied"), 320),
+      setTimeout(() => setCopyState("idle"), 2320),
+    ];
+  };
+
+  // A manual tab switch shows a short skeleton so the swap reads like a real
+  // fetch instead of an instant content swap.
+  const [isTabLoading, setIsTabLoading] = useState(false);
+  const tabLoadTimeoutRef = useRef(null);
+
+  useEffect(
+    () => () => {
+      clearTimeout(tabLoadTimeoutRef.current);
+    },
+    [],
+  );
+
   // Picks a preview tab and restarts the auto-rotation countdown, even when
   // the clicked tab is already the active one.
   const selectPreviewTab = (tab) => {
     setActiveTab(tab);
     setPreviewRotationKey((key) => key + 1);
+
+    // Re-clicking the active tab shouldn't flash a fake load.
+    if (tab === activeTab) return;
+
+    setIsTabLoading(true);
+    clearTimeout(tabLoadTimeoutRef.current);
+    tabLoadTimeoutRef.current = setTimeout(() => setIsTabLoading(false), 350);
   };
 
   // Cycle the preview tabs. Any change to activeTab (auto or manual) restarts
@@ -481,6 +676,8 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-cream text-ink">
+      <ScrollProgressBar />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 pb-20 pt-24 lg:px-10 lg:pt-28">
         <div
@@ -613,16 +810,53 @@ const Home = () => {
                 </button>
                 <button
                   onClick={() => selectPreviewTab("chat")}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-colors ${activeTab === "chat" ? "bg-accent text-ink" : "text-body hover:text-ink"}`}
+                  aria-describedby="ask-pdf-hint"
+                  className={`group relative px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-colors ${activeTab === "chat" ? "bg-accent text-ink" : "text-body hover:text-ink"}`}
                 >
                   Ask PDF
+                  {/* Pulsing nudge to try the tab; the ink ring keeps the
+                      yellow dot visible once the tab itself is accent-filled. */}
+                  <span className="pointer-events-none absolute -right-1 -top-1 flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-accent ring-1 ring-ink/50" />
+                  </span>
+                  <span
+                    id="ask-pdf-hint"
+                    role="tooltip"
+                    className="pointer-events-none absolute bottom-full right-0 z-20 mb-2 w-max max-w-[220px] rounded-xl border border-ink bg-paper px-2.5 py-1.5 text-center text-[11px] font-medium leading-snug text-ink opacity-0 shadow-sm transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  >
+                    Try me! Ask a question about the financial report.
+                  </span>
                 </button>
               </div>
             </div>
 
             <AnimatePresence mode="wait">
+              {/* Skeleton shown while a manual tab switch settles */}
+              {isTabLoading && (
+                <motion.div
+                  key="preview-skeleton"
+                  aria-hidden="true"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="min-h-[240px] space-y-3 pt-2"
+                >
+                  <div className="h-3 w-2/5 animate-pulse rounded-full bg-cloud" />
+                  <div
+                    className="h-3 w-full animate-pulse rounded-full bg-cloud"
+                    style={{ animationDelay: "120ms" }}
+                  />
+                  <div
+                    className="h-3 w-4/5 animate-pulse rounded-full bg-cloud"
+                    style={{ animationDelay: "240ms" }}
+                  />
+                </motion.div>
+              )}
+
               {/* TAB 1: Summary Output Preview */}
-              {activeTab === "summary" && (
+              {!isTabLoading && activeTab === "summary" && (
                 <motion.div
                   key="summary"
                   initial={{ opacity: 0, y: 12 }}
@@ -636,24 +870,63 @@ const Home = () => {
                       Summary Output
                     </h3>
                     <div className="flex space-x-2">
-                      <button
-                        className="rounded-full p-2 bg-cream hover:bg-sand transition-colors"
-                        title="Copy"
+                      <motion.button
+                        type="button"
+                        onClick={handleCopyPreviewSummary}
+                        title={copyState === "idle" ? "Copy summary" : "Copied"}
+                        aria-label={
+                          copyState === "idle" ? "Copy summary" : "Copied"
+                        }
+                        className="flex items-center justify-center rounded-full p-2"
+                        animate={{
+                          backgroundColor:
+                            copyState === "flash" ? "#d3fb43" : "#f1efe2",
+                          scale: copyState === "flash" ? 0.88 : 1,
+                        }}
+                        whileHover={{
+                          scale: copyState === "flash" ? 0.88 : 1.06,
+                        }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </button>
+                        {copyState === "copied" ? (
+                          <motion.svg
+                            key="check"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.4}
+                            viewBox="0 0 24 24"
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 520,
+                              damping: 22,
+                            }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 13l4 4L19 7"
+                            />
+                          </motion.svg>
+                        ) : (
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                        )}
+                      </motion.button>
                       <button
                         className="rounded-full p-2 bg-accent transition-colors"
                         title="Download"
@@ -677,12 +950,11 @@ const Home = () => {
 
                   <div className="bg-cream p-5 rounded-2xl border border-sand">
                     <p className="text-body text-sm sm:text-base leading-relaxed">
-                      This document details the fiscal year growth strategy,
-                      highlighting a{" "}
-                      <strong className="text-ink">34% expansion</strong> in
-                      cloud infrastructure revenue and operational streamlining.
-                      Key risks involve supply chain constraints and localized
-                      regulatory hurdles across global markets.
+                      {previewSummary.lead}
+                      <strong className="text-ink">
+                        {previewSummary.highlight}
+                      </strong>
+                      {previewSummary.tail}
                     </p>
 
                     <div className="mt-4 pt-4 border-t border-sand space-y-1">
@@ -704,7 +976,7 @@ const Home = () => {
               )}
 
               {/* TAB 2: Translation Section Preview */}
-              {activeTab === "translation" && (
+              {!isTabLoading && activeTab === "translation" && (
                 <motion.div
                   key="translation"
                   initial={{ opacity: 0, y: 12 }}
@@ -788,7 +1060,7 @@ const Home = () => {
               )}
 
               {/* TAB 3: Extracted Images Preview */}
-              {activeTab === "images" && (
+              {!isTabLoading && activeTab === "images" && (
                 <motion.div
                   key="images"
                   initial={{ opacity: 0, y: 12 }}
@@ -837,7 +1109,7 @@ const Home = () => {
               )}
 
               {/* TAB 4: Ask PDF (RAG) Preview */}
-              {activeTab === "chat" && (
+              {!isTabLoading && activeTab === "chat" && (
                 <motion.div
                   key="chat"
                   initial={{ opacity: 0, y: 12 }}
@@ -925,10 +1197,17 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <motion.div
+            className="grid grid-cols-1 gap-6 md:grid-cols-3"
+            variants={cardStagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             {features.map((feature) => (
-              <div
+              <motion.div
                 key={feature.title}
+                variants={fadeUp}
                 className="rounded-3xl border border-sand bg-paper p-8 transition-all duration-300 hover:border-ink"
               >
                 <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-ink">
@@ -945,9 +1224,9 @@ const Home = () => {
                   {feature.title}
                 </h3>
                 <p className="mt-3 text-base text-body">{feature.body}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
@@ -969,9 +1248,13 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {useCases.map((uc) => (
-              <div
+            {useCases.map((uc, index) => (
+              <motion.div
                 key={uc.title}
+                variants={slideInFrom(index % 2 === 0 ? -56 : 56)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
                 className="rounded-3xl border border-sand bg-paper p-8 flex flex-col justify-between hover:border-ink transition-colors"
               >
                 <div>
@@ -983,7 +1266,7 @@ const Home = () => {
                   </h3>
                   <p className="text-body text-base">{uc.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -1029,13 +1312,16 @@ const Home = () => {
       {/* Stats Section */}
       <section className="px-6 py-20 lg:px-10">
         <motion.div
+          ref={statsCount.ref}
           className="mx-auto grid max-w-[1132px] grid-cols-2 gap-12 text-center md:grid-cols-4 bg-paper border border-sand rounded-3xl p-10"
           {...sectionReveal}
         >
-          {stats.map((stat) => (
+          {stats.map((stat, index) => (
             <div key={stat.label}>
               <div className="text-[44px] font-medium leading-none tracking-display text-ink sm:text-[56px]">
-                {stat.value}
+                {typeof stat.target === "number"
+                  ? `${statsCount.counts[index]}${stat.suffix}`
+                  : stat.value}
               </div>
               <div className="mt-3 text-caption text-body sm:text-base">
                 {stat.label}
