@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140" fill="none">
+  <rect width="320" height="140" rx="12" fill="#fff"/>
+  <rect x="16" y="49" width="66" height="42" rx="8" fill="#f1efe2" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="103" y="24" width="94" height="42" rx="8" fill="#d3fb43" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="103" y="76" width="94" height="42" rx="8" fill="#f1efe2" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="218" y="49" width="86" height="42" rx="8" fill="#fff" stroke="#1d1d1d" stroke-width="2"/>
+  <path d="M82 70h12m9-25H94v25m9 26H94V70m103 0h21" stroke="#1d1d1d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m214 66 5 4-5 4" stroke="#1d1d1d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="31" cy="62" r="3" fill="#a33a2b"/>
+  <circle cx="31" cy="77" r="3" fill="#a33a2b"/>
+  <path d="M42 62h27m-27 15h19" stroke="#575757" stroke-width="2" stroke-linecap="round"/>
+  <path d="M116 39h49m-49 10h34m-34 40h49m-49 10h34" stroke="#1d1d1d" stroke-width="2" stroke-linecap="round"/>
+  <path d="M231 63h59m-59 14h41" stroke="#575757" stroke-width="2" stroke-linecap="round"/>
+</svg>
