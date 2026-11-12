@@ -209,6 +209,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import InkGridPulse from "../Components/InkGridPulse";
+import revenueBreakdownImage from "../assets/revenue-breakdown.svg";
+import ragPipelineImage from "../assets/rag-pipeline.svg";
+import complianceMatrixImage from "../assets/compliance-matrix.svg";
 
 const features = [
   {
@@ -310,18 +314,21 @@ const mockExtractedImages = [
     title: "Figure 1: Quarterly Revenue Breakdown",
     page: 4,
     type: "Bar Chart",
+    image: revenueBreakdownImage,
   },
   {
     id: 2,
     title: "Figure 2: Architecture & RAG Pipeline",
     page: 9,
     type: "Diagram",
+    image: ragPipelineImage,
   },
   {
     id: 3,
     title: "Table 3: Regional Compliance Matrix",
     page: 15,
     type: "Data Table",
+    image: complianceMatrixImage,
   },
 ];
 
@@ -475,9 +482,36 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-cream text-ink">
       {/* Hero Section */}
-      <section className="px-6 pb-20 pt-24 lg:px-10 lg:pt-28">
+      <section className="relative overflow-hidden px-6 pb-20 pt-24 lg:px-10 lg:pt-28">
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          aria-hidden="true"
+        >
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-float"
+              style={{
+                left: `${10 + i * 12}%`,
+                animationDelay: `${i * 3}s`,
+                animationDuration: `${22 + (i % 3) * 4}s`,
+              }}
+            >
+              <div
+                className="h-20 w-16 rounded-card border-2 border-ink bg-paper shadow-hard-sm opacity-40"
+                style={{ transform: `rotate(${-8 + (i % 5) * 4}deg)` }}
+              >
+                <div className="mx-2 mt-3 space-y-1">
+                  <div className="h-1 w-3/4 rounded bg-ink/10" />
+                  <div className="h-1 w-full rounded bg-ink/10" />
+                  <div className="h-1 w-1/2 rounded bg-accent/30" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
         <motion.div
-          className="mx-auto max-w-[1132px] text-center"
+          className="relative mx-auto max-w-[1132px] text-center"
           variants={heroStagger}
           initial="hidden"
           animate="visible"
@@ -778,20 +812,12 @@ const Home = () => {
                         key={img.id}
                         className="bg-cream rounded-2xl border border-sand p-3 flex flex-col justify-between"
                       >
-                        <div className="h-28 bg-sand rounded-xl flex items-center justify-center border border-sand/50">
-                          <svg
-                            className="w-8 h-8 text-muted"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={1.5}
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
+                        <div className="h-28 overflow-hidden rounded-xl border border-sand/50 bg-paper">
+                          <img
+                            src={img.image}
+                            alt={img.title}
+                            className="h-full w-full object-contain"
+                          />
                         </div>
                         <div className="mt-3">
                           <span className="text-[10px] font-semibold uppercase text-muted bg-sand px-2 py-0.5 rounded-md">
@@ -881,8 +907,12 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="border-y border-sand bg-sand px-6 py-24 lg:px-10">
-        <motion.div className="mx-auto max-w-[1132px]" {...sectionReveal}>
+      <section className="relative overflow-hidden border-y border-sand bg-sand px-6 py-24 lg:px-10">
+        <InkGridPulse nodeCount={6} />
+        <motion.div
+          className="relative mx-auto max-w-[1132px]"
+          {...sectionReveal}
+        >
           <div className="mb-16 max-w-2xl">
             <h2 className="text-[36px] font-medium leading-[1.02] tracking-heading text-ink sm:text-[48px] lg:text-heading-2">
               Why Choose{" "}
@@ -922,8 +952,12 @@ const Home = () => {
       </section>
 
       {/* Use Cases Section */}
-      <section className="px-6 py-24 lg:px-10">
-        <motion.div className="mx-auto max-w-[1132px]" {...sectionReveal}>
+      <section className="relative overflow-hidden px-6 py-24 lg:px-10">
+        <InkGridPulse nodeCount={4} />
+        <motion.div
+          className="relative mx-auto max-w-[1132px]"
+          {...sectionReveal}
+        >
           <div className="mb-16 text-center max-w-2xl mx-auto">
             <h2 className="text-[36px] font-medium leading-[1.02] tracking-heading text-ink sm:text-[48px] lg:text-heading-2">
               Designed For Enterprise Workflows
@@ -956,8 +990,12 @@ const Home = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="border-y border-sand bg-sand px-6 py-24 lg:px-10">
-        <motion.div className="mx-auto max-w-[1132px]" {...sectionReveal}>
+      <section className="relative overflow-hidden border-y border-sand bg-sand px-6 py-24 lg:px-10">
+        <InkGridPulse nodeCount={8} />
+        <motion.div
+          className="relative mx-auto max-w-[1132px]"
+          {...sectionReveal}
+        >
           <div className="mb-16 text-center">
             <h2 className="text-[36px] font-medium leading-[1.02] tracking-heading text-ink sm:text-[48px] lg:text-heading-2">
               How It Works

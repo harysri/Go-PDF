@@ -89,6 +89,111 @@
   padding: 1.5rem;
 }
 
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateY(-100px) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float linear infinite;
+  animation-fill-mode: backwards;
+}
+
+.ink-grid-pulse {
+  --grid-line: rgb(29 29 29 / 10%);
+  --grid-pulse-ring: rgb(211 251 67 / 45%);
+  --accent: #d3fb43;
+  --ink: #1d1d1d;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ink-grid-pulse::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  content: "";
+  opacity: 0.5;
+}
+
+.ink-grid-pulse::after {
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    transparent 30%,
+    var(--grid-pulse-ring) 32%,
+    transparent 34%,
+    transparent 100%
+  );
+  content: "";
+  animation: grid-breathe 4s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes grid-breathe {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.grid-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  animation: node-flash 6s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes node-flash {
+  0%,
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  5% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  10% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
 /* Typeset math inside chat responses (see Components/FormatResponse.jsx) */
 .format-response .katex {
   font-size: 1.05em;
@@ -168,6 +273,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+
+  .ink-grid-pulse::after,
+  .grid-node {
+    animation: none;
+    opacity: 0;
+  }
+
   .voice-waveform__bar {
     animation: none;
     transform: scaleY(0.7);
